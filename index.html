@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>| Complete Life Dashboard 🌱🧠💪 📈🚀</title>
+      <title> Complete Life Dashboard 🌱🧠💪 📈🚀</title>
       <link rel="icon" type="image/x-icon" href="download.jpg">
     <style>
         * {
@@ -11,12 +11,46 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* Light Theme (default) */
+        :root {
+            --bg-primary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-light: #e2e8f0;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+            --input-bg: white;
+            --tab-active: #ffffff;
+            --tab-inactive: #475569;
+        }
+
+        body.dark {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-light: #334155;
+            --accent: #3b82f6;
+            --accent-hover: #60a5fa;
+            --card-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            --input-bg: #334155;
+            --tab-active: #1e293b;
+            --tab-inactive: #94a3b8;
         }
 
         body {
-            background: #f1f5f9;
-            color: #0f172a;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             padding: 2rem 1.5rem;
+            transition: background 0.3s, color 0.3s;
         }
 
         .app-container {
@@ -24,8 +58,9 @@
             margin: 0 auto;
         }
 
+        /* Header with theme toggle */
         .header {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -35,25 +70,43 @@
         h1 {
             font-size: 1.9rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
         }
-        .year-badge {
-            background: white;
-            padding: 0.4rem 1rem;
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            padding: 0.5rem 1rem;
             border-radius: 40px;
-            font-weight: 500;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            cursor: pointer;
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .privacy-banner {
+            background: var(--success);
+            opacity: 0.9;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.8rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .tabs {
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid var(--border-light);
             margin-bottom: 2rem;
             overflow-x: auto;
             padding-bottom: 0.5rem;
@@ -66,18 +119,13 @@
             font-weight: 600;
             cursor: pointer;
             border-radius: 40px;
-            transition: 0.2s;
-            color: #475569;
+            color: var(--tab-inactive);
             white-space: nowrap;
         }
         .tab-btn.active {
-            background: #ffffff;
-            color: #2563eb;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border-bottom: 2px solid #2563eb;
-        }
-        .tab-btn:hover:not(.active) {
-            background: #e6edf5;
+            background: var(--tab-active);
+            color: var(--accent);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .panel {
@@ -87,455 +135,504 @@
         .panel.active-panel {
             display: block;
         }
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(6px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
 
         .card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 28px;
             padding: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+            box-shadow: var(--card-shadow);
             margin-bottom: 2rem;
+            border: 1px solid var(--border-light);
         }
         .card-title {
             font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid var(--accent);
             padding-left: 1rem;
         }
+
         .grid-2col {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 1.8rem;
         }
 
-        /* Todo */
-        .todo-item {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 0.8rem 1rem;
-            margin-bottom: 0.75rem;
+        /* Pomodoro Timer Section */
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            font-family: monospace;
+            text-align: center;
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 60px;
+        }
+        .pomo-controls {
             display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .timer-presets {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .preset-btn {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+        }
+        .custom-timer {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+        .custom-timer input {
+            width: 80px;
+            text-align: center;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Music Player */
+        .music-player {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .music-controls {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
             align-items: center;
+            margin-bottom: 0.8rem;
+        }
+        .music-btn {
+            background: var(--accent);
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+        }
+        .volume-slider {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        /* Data Table Section */
+        .data-table-wrapper {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid var(--border-light);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .data-table th {
+            background: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        /* Flex Page (Blank Canvas) Styles */
+        .flex-canvas {
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        .canvas-header {
+            display: flex;
             gap: 12px;
-            border: 1px solid #eef2ff;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
         }
-        .todo-priority { width: 10px; height: 40px; border-radius: 20px; }
-        .priority-high { background: #ef4444; }
-        .priority-medium { background: #f97316; }
-        .priority-low { background: #22c55e; }
-        .todo-content { flex: 1; }
-        .todo-text { font-weight: 500; }
-        .todo-due { font-size: 0.7rem; color: #64748b; }
-        .todo-actions button {
-            background: none; border: none; font-size: 1.2rem; cursor: pointer; margin: 0 4px;
+        .canvas-header input {
+            flex: 2;
+            font-size: 1.3rem;
+            font-weight: 600;
+            background: var(--input-bg);
+            border: 1px solid var(--border-light);
+            padding: 0.6rem 1rem;
         }
-        .add-todo-form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
-        
+        .color-picker-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .color-picker-group label {
+            font-size: 0.8rem;
+        }
+        .color-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.1s;
+        }
+        .color-btn.selected {
+            border: 2px solid var(--text-primary);
+            transform: scale(1.05);
+        }
+        .bg-color-btn {
+            background: #ffffff;
+            border: 1px solid #ddd;
+        }
+        .canvas-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            background: var(--canvas-bg, #fff9f0);
+            color: var(--canvas-text, #1e293b);
+            border: 2px solid var(--border-light);
+            border-radius: 24px;
+            resize: vertical;
+            font-family: inherit;
+            transition: background 0.2s, color 0.2s;
+        }
+        .canvas-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .flex-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.8rem;
+            text-align: center;
+        }
+
         input, select, textarea {
+            background: var(--input-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
             padding: 0.7rem 1rem;
             border-radius: 40px;
-            border: 1px solid #cbd5e1;
-            background: white;
-            font-size: 0.9rem;
         }
         button {
-            background: #1e293b;
+            background: var(--accent);
             border: none;
             padding: 0.6rem 1.2rem;
             border-radius: 40px;
             font-weight: 500;
             color: white;
             cursor: pointer;
-            transition: 0.2s;
         }
-        button.primary { background: #2563eb; }
-        button.success { background: #10b981; }
-        button.warning { background: #f59e0b; }
-        
-        .timer-display {
-            font-size: 4rem;
-            font-weight: 800;
-            font-family: monospace;
-            text-align: center;
-            background: #f1f5f9;
-            padding: 1rem;
-            border-radius: 60px;
-        }
-        .pomo-buttons { display: flex; justify-content: center; gap: 1rem; margin: 1rem 0; }
-        canvas { max-width: 100%; background: white; border-radius: 24px; }
+        button.secondary { background: var(--text-secondary); }
+        button.danger { background: var(--danger); }
+        button.success { background: var(--success); }
 
-        /* Word Vault */
-        .word-card {
-            background: #fefce8;
-            border-radius: 20px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-left: 6px solid #8b5cf6;
-        }
-        .word-term { font-size: 1.3rem; font-weight: 700; color: #4c1d95; }
-        .review-badge {
-            display: inline-block; background: #e0e7ff; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
-        }
-        .due-today { background: #fef3c7; border-left-color: #f97316; }
-        .form-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
-        
-        /* Health Tracker */
-        .health-entry {
-            background: #ecfdf5;
-            border-radius: 20px;
-            padding: 1rem;
-            margin-bottom: 0.8rem;
-            border-left: 6px solid #10b981;
-        }
-        .health-date { font-weight: 700; color: #065f46; margin-bottom: 8px; }
-        .health-icons { display: flex; gap: 1rem; margin-top: 6px; }
-        .food-good { color: #16a34a; font-weight: 600; }
-        .workout-good { color: #16a34a; font-weight: 600; }
-        .stats-summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
-        .stat-card { background: #f3f4f6; border-radius: 20px; padding: 0.8rem 1.2rem; text-align: center; flex: 1; }
-
-        hr { margin: 1rem 0; }
-        footer { text-align: center; margin-top: 2rem; font-size: 0.75rem; color: #64748b; }
+        @keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
         @media (max-width: 640px) { body { padding: 1rem; } .timer-display { font-size: 2.5rem; } }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="app-container">
     <div class="header">
-        <h1>📆 Year Compass · Complete Tracker</h1>
-        <div class="year-badge" id="yearDisplay"></div>
+        <h1> Complete Life Dashboard 🌱🧠💪 📈🚀</h1>
+        <button class="theme-toggle" id="themeToggleBtn">🌙 Dark Mode</button>
+    </div>
+
+    <div class="privacy-banner">
+        🔒 Your data stays in browser localStorage • Flex Canvas auto-saves • Music uses Web Audio
     </div>
 
     <div class="tabs">
         <button class="tab-btn active" data-tab="tab-todo">✅ To-Do</button>
-        <button class="tab-btn" data-tab="tab-pomo">🍅 Pomodoro</button>
+        <button class="tab-btn" data-tab="tab-pomo">🍅 Pomodoro + Music</button>
         <button class="tab-btn" data-tab="tab-words">📖 Word Vault</button>
-        <button class="tab-btn" data-tab="tab-health">💪 Health Tracker</button>
+        <button class="tab-btn" data-tab="tab-health">💪 Health</button>
+        <button class="tab-btn" data-tab="tab-table">📊 Data Table</button>
         <button class="tab-btn" data-tab="tab-aim">🎯 My Aim</button>
-        <button class="tab-btn" data-tab="tab-track">📊 Year Data</button>
+        <button class="tab-btn" data-tab="tab-flex">🎨 Flex Page</button>
     </div>
 
-    <!-- PANEL 1: TO-DO -->
+    <!-- TO-DO PANEL -->
     <div id="tab-todo" class="panel active-panel">
         <div class="card">
-            <div class="card-title">📋 Prioritized Task Manager</div>
+            <div class="card-title">📋 Prioritized Tasks</div>
             <div id="todo-list-container"></div>
-            <div class="add-todo-form">
+            <div class="add-todo-form" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:1rem;">
                 <input type="text" id="todoTitle" placeholder="Task title" style="flex:2;">
-                <select id="todoPriority">
-                    <option value="high">🔥 High</option>
-                    <option value="medium">⚡ Medium</option>
-                    <option value="low">🌿 Low</option>
-                </select>
+                <select id="todoPriority"><option value="high">🔥 High</option><option value="medium">⚡ Medium</option><option value="low">🌿 Low</option></select>
                 <input type="date" id="todoDue">
-                <button id="addTodoBtn" class="primary">+ Add</button>
+                <button id="addTodoBtn">+ Add</button>
             </div>
         </div>
     </div>
 
-    <!-- PANEL 2: POMODORO -->
+    <!-- POMODORO + MUSIC PANEL -->
     <div id="tab-pomo" class="panel">
         <div class="grid-2col">
             <div class="card">
-                <div class="card-title">🍅 Focus Timer</div>
+                <div class="card-title">🍅 Smart Pomodoro</div>
                 <div class="timer-display" id="timerLabel">25:00</div>
-                <div class="pomo-buttons">
+                <div class="timer-presets">
+                    <button class="preset-btn" data-minutes="25">📘 Short (25min)</button>
+                    <button class="preset-btn" data-minutes="50">📚 Long (50min)</button>
+                    <button class="preset-btn" data-minutes="15">☕ Break (15min)</button>
+                </div>
+                <div class="custom-timer">
+                    <input type="number" id="customMinutes" placeholder="Minutes" min="1" max="180" value="25">
+                    <button id="setCustomTimer">Set Custom</button>
+                </div>
+                <div class="pomo-controls">
                     <button id="pomoStart">▶ Start</button>
                     <button id="pomoPause">⏸ Pause</button>
                     <button id="pomoReset">🔄 Reset</button>
                 </div>
-                <div style="background:#eef2ff; border-radius:24px; padding:1rem; text-align:center;">
+                <div style="background:var(--bg-primary); border-radius:24px; padding:1rem; margin-top:1rem;">
                     <div>✅ Today: <strong id="sessionCountToday">0</strong></div>
                     <div>📅 Year total: <strong id="totalSessionsYear">0</strong></div>
-                    <button id="logSessionBtn" style="margin-top:8px; background:#22c55e;">💾 Save session</button>
+                    <button id="logSessionBtn" class="success" style="margin-top:8px;">💾 Save Session</button>
                 </div>
             </div>
             <div class="card">
-                <div class="card-title">📈 Pomodoro History (30d)</div>
-                <canvas id="pomoChart" width="400" height="250"></canvas>
+                <div class="card-title">🎵 Study Music & Ambience</div>
+                <div class="music-player">
+                    <div class="music-controls">
+                        <button id="playLofi" class="music-btn">🎧 Lofi Study</button>
+                        <button id="playNature" class="music-btn">🌿 Nature Rain</button>
+                        <button id="playPiano" class="music-btn">🎹 Piano Focus</button>
+                        <button id="stopMusic" class="secondary">⏹️ Stop</button>
+                    </div>
+                    <div class="music-controls">
+                        <span>🔊 Volume:</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="30" class="volume-slider">
+                        <span id="volumeValue">30%</span>
+                    </div>
+                    <div id="musicStatus" style="font-size:0.75rem; margin-top:5px;">⚪ Stopped</div>
+                </div>
+                <div class="card-title" style="margin-top:1rem;">📈 Pomodoro Chart (30d)</div>
+                <canvas id="pomoChart" height="200"></canvas>
             </div>
         </div>
     </div>
 
-    <!-- PANEL 3: WORD VAULT -->
+    <!-- WORD VAULT -->
     <div id="tab-words" class="panel">
         <div class="card">
-            <div class="card-title">📖 Word Vault · Learn & Review</div>
-            <div style="background:#f9f9ff; border-radius:24px; padding:1rem; margin-bottom:1.5rem;">
-                <div class="form-row">
-                    <input type="text" id="wordTerm" placeholder="Word" style="flex:1.5;">
-                    <input type="text" id="wordMeaning" placeholder="Meaning" style="flex:2;">
-                </div>
-                <div class="form-row">
-                    <input type="text" id="wordSynonyms" placeholder="Synonyms (comma)" style="flex:1;">
-                    <input type="text" id="wordAntonyms" placeholder="Antonyms (comma)" style="flex:1;">
-                    <input type="date" id="wordReviewDate">
-                </div>
-                <button id="addWordBtn" class="primary">➕ Add Word</button>
-            </div>
-            <div class="word-filter">
-                <button id="filterAllWords" class="secondary">All Words</button>
-                <button id="filterDueToday" class="warning">Due Today</button>
+            <div class="card-title">📖 Word Vault</div>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:1rem;">
+                <input type="text" id="wordTerm" placeholder="Word" style="flex:1.5;">
+                <input type="text" id="wordMeaning" placeholder="Meaning" style="flex:2;">
+                <input type="text" id="wordSynonyms" placeholder="Synonyms" style="flex:1;">
+                <input type="text" id="wordAntonyms" placeholder="Antonyms" style="flex:1;">
+                <input type="date" id="wordReviewDate">
+                <button id="addWordBtn">➕ Add</button>
             </div>
             <div id="wordsListContainer"></div>
         </div>
     </div>
 
-    <!-- PANEL 4: HEALTH TRACKER (Food & Workout) -->
+    <!-- HEALTH TRACKER -->
     <div id="tab-health" class="panel">
         <div class="card">
-            <div class="card-title">💪 Health Tracker · Food & Workout</div>
-            <div class="stats-summary" id="healthSummary"></div>
-            <div style="background:#f0fdf4; border-radius:24px; padding:1rem; margin-bottom:1.5rem;">
-                <div class="form-row">
-                    <input type="date" id="healthDate" value="">
-                    <label style="display: flex; align-items: center; gap: 8px;">
-                        <input type="checkbox" id="foodCheck"> 🥗 Proper Food
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px;">
-                        <input type="checkbox" id="workoutCheck"> 🏋️ Workout Done
-                    </label>
-                    <button id="addHealthEntryBtn" class="success">✅ Log Today</button>
-                </div>
+            <div class="card-title">💪 Food & Workout Log</div>
+            <div class="stats-summary" id="healthSummary" style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;"></div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <input type="date" id="healthDate">
+                <label><input type="checkbox" id="foodCheck"> 🥗 Proper Food</label>
+                <label><input type="checkbox" id="workoutCheck"> 🏋️ Workout</label>
+                <button id="addHealthEntryBtn" class="success">Log</button>
             </div>
-            <div id="healthEntriesList"></div>
-            <button id="clearHealthData" class="warning" style="margin-top:1rem; background:#dc2626;">Clear All Health Data</button>
+            <div id="healthEntriesList" style="margin-top:1rem;"></div>
         </div>
     </div>
 
-    <!-- PANEL 5: AIM -->
+    <!-- DATA TABLE - Consolidated View -->
+    <div id="tab-table" class="panel">
+        <div class="card">
+            <div class="card-title">📊 Consolidated Year Data Table</div>
+            <div class="data-table-wrapper">
+                <table class="data-table" id="masterDataTable">
+                    <thead><tr><th>Date / Type</th><th>Category</th><th>Details</th></tr></thead>
+                    <tbody id="tableBody"><tr><td colspan="3">Loading...</td></tr></tbody>
+                </table>
+            </div>
+            <button id="refreshTableBtn" style="margin-top:1rem;">🔄 Refresh Table</button>
+        </div>
+    </div>
+
+    <!-- AIM -->
     <div id="tab-aim" class="panel">
         <div class="card">
-            <div class="card-title">🌟 My North Star · Aim</div>
-            <textarea id="aimTextArea" rows="6" style="width:100%; border-radius:24px; padding:1rem; border:1px solid #cbd5e1;"></textarea>
-            <button id="saveAimBtn" style="margin-top:1rem;">💾 Save Aim</button>
-            <div id="aimStatus" style="margin-top:0.5rem; font-size:0.8rem;"></div>
+            <div class="card-title">🌟 My Aim</div>
+            <textarea id="aimTextArea" rows="5" style="width:100%; border-radius:24px;"></textarea>
+            <button id="saveAimBtn">💾 Save Aim</button>
         </div>
     </div>
 
-    <!-- PANEL 6: YEAR DATA TRACKER -->
-    <div id="tab-track" class="panel">
-        <div class="card">
-            <div class="card-title">📆 One Year Data Logger</div>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <input type="date" id="trackDate">
-                <input type="text" id="trackValue" placeholder="e.g., Milestone, mood, reflection">
-                <button id="addTrackBtn" class="primary">➕ Add entry</button>
+    <!-- FLEX PAGE: Blank Canvas with customizable heading & colors -->
+    <div id="tab-flex" class="panel">
+        <div class="card flex-canvas">
+            <div class="card-title">🎨 Flex Canvas · Your Creative Space</div>
+            <div class="canvas-header">
+                <input type="text" id="flexHeading" placeholder="Section Heading (e.g., Journal, Ideas, Draft)" value="✨ My Creative Space">
+                <div class="color-picker-group">
+                    <label>📝 Text Color:</label>
+                    <input type="color" id="textColorPicker" value="#1e293b">
+                    <label>🎨 Background:</label>
+                    <input type="color" id="bgColorPicker" value="#fff9f0">
+                    <button id="resetFlexColors" class="secondary" style="padding:0.4rem 1rem;">Reset Colors</button>
+                </div>
             </div>
-            <hr>
-            <div id="trackEntriesList" style="max-height: 280px; overflow-y: auto;"></div>
-            <button id="clearAllYearData" style="background:#b91c1c; margin-top:12px;">⚠️ Clear all yearly data</button>
+            <textarea id="flexContent" class="canvas-textarea" placeholder="Write anything you want here... stories, notes, brainstorming, dreams, daily reflections...&#10;&#10;This is your blank canvas. Change heading, text color, background color anytime. Everything auto-saves!"></textarea>
+            <div class="canvas-actions">
+                <button id="saveFlexNow" class="success">💾 Save Now</button>
+                <button id="clearFlexContent" class="danger">🗑️ Clear All Content</button>
+                <span style="margin-left:auto; font-size:0.75rem;">✨ Auto-saves on every change</span>
+            </div>
+            <div class="flex-note">💡 Tip: Change heading, pick any colors — your canvas is stored locally. Use it for journaling, project outlines, or free writing.</div>
         </div>
     </div>
-    <footer>✨ All data stored locally • One-year tracking • Word review & health logs persist</footer>
+    
+    <footer style="text-align:center; margin-top:2rem; font-size:0.7rem;">🎵 Study Music uses Web Audio Oscillator | Flex Canvas auto-saves heading, content & colors</footer>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    // ==================== STORAGE KEYS ====================
-    const STORAGE = {
-        TODOS: "zenith_todos",
-        POMO_SESSIONS: "zenith_pomo_sessions",
-        AIM: "zenith_aim_text",
-        YEAR_TRACK: "zenith_year_track_entries",
-        WORDS: "zenith_word_vault",
-        HEALTH: "zenith_health_logs"
-    };
-
-    // Helper
+    // ========== THEME TOGGLE ==========
+    function initTheme() {
+        const savedTheme = localStorage.getItem('zenith_theme');
+        if(savedTheme === 'dark') { document.body.classList.add('dark'); document.getElementById('themeToggleBtn').innerHTML = '☀️ Light Mode'; }
+        else { document.body.classList.remove('dark'); document.getElementById('themeToggleBtn').innerHTML = '🌙 Dark Mode'; }
+    }
+    function toggleTheme() { document.body.classList.toggle('dark'); const isDark = document.body.classList.contains('dark'); localStorage.setItem('zenith_theme', isDark ? 'dark' : 'light'); document.getElementById('themeToggleBtn').innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode'; }
+    
+    // ========== MUSIC PLAYER (Web Audio) ==========
+    let audioContext = null, currentOscillator = null, currentGain = null;
+    function initAudio() { if(audioContext) return; audioContext = new (window.AudioContext || window.webkitAudioContext)(); currentGain = audioContext.createGain(); currentGain.connect(audioContext.destination); const vol = document.getElementById('volumeSlider').value/100; currentGain.gain.value = vol; }
+    function stopMusic() { if(currentOscillator) { if(Array.isArray(currentOscillator)) currentOscillator.forEach(n=>{ try{ n.stop?.(); n.disconnect?.(); }catch(e){} }); else try{ currentOscillator.stop?.(); currentOscillator.disconnect?.(); }catch(e){} currentOscillator=null; } document.getElementById('musicStatus').innerHTML='⚪ Stopped'; }
+    function playStudyMusic(type) { stopMusic(); initAudio(); if(audioContext.state === 'suspended') audioContext.resume(); if(type === 'lofi') { const osc1=audioContext.createOscillator(), osc2=audioContext.createOscillator(), gain=audioContext.createGain(); gain.gain.value=0.12; osc1.type='sine'; osc2.type='triangle'; osc1.frequency.value=174.61; osc2.frequency.value=261.63; osc1.connect(gain); osc2.connect(gain); gain.connect(currentGain); osc1.start(); osc2.start(); currentOscillator=[osc1,osc2,gain]; }
+    else if(type === 'nature') { const bufferSize=4096, noise=audioContext.createScriptProcessor(bufferSize,1,1); noise.onaudioprocess=e=>{ let out=e.outputBuffer.getChannelData(0); for(let i=0;i<bufferSize;i++) out[i]=(Math.random()*2-1)*0.08; }; const filter=audioContext.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value=1200; noise.connect(filter); filter.connect(currentGain); noise.start?.(); currentOscillator=[noise,filter]; }
+    else if(type === 'piano') { const osc=audioContext.createOscillator(); osc.type='sine'; osc.frequency.value=440; const gain=audioContext.createGain(); gain.gain.value=0.08; osc.connect(gain); gain.connect(currentGain); osc.start(); currentOscillator=[osc,gain]; }
+    document.getElementById('musicStatus').innerHTML=`🎵 Playing: ${type} study music`; }
+    function setVolume(val) { if(currentGain) currentGain.gain.value = val/100; document.getElementById('volumeValue').innerText=val+'%'; }
+    
+    // ========== STORAGE KEYS ==========
+    const STORAGE = { TODOS:"zenith_todos", POMO_SESSIONS:"zenith_pomo_sessions", AIM:"zenith_aim_text", YEAR_TRACK:"zenith_year_track_entries", WORDS:"zenith_word_vault", HEALTH:"zenith_health_logs", FLEX:"zenith_flex_canvas" };
     function getTodayStr() { return new Date().toISOString().slice(0,10); }
-
-    // ==================== TO-DO ====================
-    let todos = [];
-    function loadTodos() {
-        const stored = localStorage.getItem(STORAGE.TODOS);
-        if(stored) todos = JSON.parse(stored);
-        else todos = [
-            { id: Date.now()+1, title: "Review Word Vault daily", priority: "medium", dueDate: getTodayStr(), completed: false },
-            { id: Date.now()+2, title: "Log food & workout", priority: "high", dueDate: getTodayStr(), completed: false }
-        ];
-        saveTodos();
-        renderTodos();
-    }
-    function saveTodos() { localStorage.setItem(STORAGE.TODOS, JSON.stringify(todos)); }
-    function renderTodos() {
-        const container = document.getElementById("todo-list-container");
-        if(!container) return;
-        if(todos.length === 0) { container.innerHTML = "<div style='padding:1rem;'>✨ No tasks</div>"; return; }
-        const priorityOrder = { high:1, medium:2, low:3 };
-        const sorted = [...todos].sort((a,b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-        container.innerHTML = sorted.map(todo => `
-            <div class="todo-item" style="opacity: ${todo.completed ? 0.6 : 1};">
-                <div class="todo-priority priority-${todo.priority}"></div>
-                <div class="todo-content">
-                    <div class="todo-text" style="text-decoration: ${todo.completed ? 'line-through' : 'none'}">${escapeHtml(todo.title)}</div>
-                    <div class="todo-due">📅 ${todo.dueDate || 'No due'} • ${todo.priority}</div>
-                </div>
-                <div class="todo-actions">
-                    <button data-id="${todo.id}" class="toggle-todo">✓</button>
-                    <button data-id="${todo.id}" class="delete-todo">🗑️</button>
-                </div>
-            </div>
-        `).join('');
-        document.querySelectorAll('.toggle-todo').forEach(btn => {
-            btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); const task = todos.find(t=>t.id===id); if(task) task.completed=!task.completed; saveTodos(); renderTodos(); });
-        });
-        document.querySelectorAll('.delete-todo').forEach(btn => {
-            btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); todos = todos.filter(t=>t.id!==id); saveTodos(); renderTodos(); });
-        });
-    }
-    function addTodo(title, priority, dueDate) { if(!title.trim()) return; todos.push({ id:Date.now(), title:title.trim(), priority, dueDate, completed:false }); saveTodos(); renderTodos(); }
-
-    // ==================== POMODORO ====================
-    let pomodoroSessions = [];
-    let timerInterval = null, timeLeft = 25*60, isRunning = false;
-    let pomoChart = null;
-    function loadPomodoro() { const stored = localStorage.getItem(STORAGE.POMO_SESSIONS); if(stored) pomodoroSessions = JSON.parse(stored); else pomodoroSessions = []; updatePomoStatsAndGraph(); }
-    function savePomodoro() { localStorage.setItem(STORAGE.POMO_SESSIONS, JSON.stringify(pomodoroSessions)); updatePomoStatsAndGraph(); }
-    function getTodaySessions() { const today = getTodayStr(); const entry = pomodoroSessions.find(e=>e.date===today); return entry ? entry.count : 0; }
-    function updatePomoStatsAndGraph() {
-        document.getElementById("sessionCountToday").innerText = getTodaySessions();
-        document.getElementById("totalSessionsYear").innerText = pomodoroSessions.reduce((s,e)=>s+e.count,0);
-        renderPomoChart();
-    }
-    function addPomodoroSession() { const today = getTodayStr(); const idx = pomodoroSessions.findIndex(e=>e.date===today); if(idx>=0) pomodoroSessions[idx].count++; else pomodoroSessions.push({date:today, count:1}); savePomodoro(); }
-    function renderPomoChart() {
-        const canvas = document.getElementById("pomoChart"); if(!canvas) return;
-        const ctx = canvas.getContext('2d'); const labels=[], data=[];
-        for(let i=29;i>=0;i--) { const d=new Date(); d.setDate(d.getDate()-i); const ds=d.toISOString().slice(0,10); labels.push(ds.slice(5)); const s = pomodoroSessions.find(e=>e.date===ds); data.push(s? s.count:0); }
-        if(pomoChart) { pomoChart.data.labels=labels; pomoChart.data.datasets[0].data=data; pomoChart.update(); }
-        else { pomoChart = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'🍅 Pomodoros', data, backgroundColor:'#3b82f6', borderRadius:10 }] }, options:{ responsive:true } }); }
-    }
-    function startTimer() { if(timerInterval) clearInterval(timerInterval); isRunning=true; timerInterval=setInterval(()=>{ if(timeLeft>0 && isRunning) { timeLeft--; updateTimerDisplay(); } else if(timeLeft===0 && isRunning) { clearInterval(timerInterval); isRunning=false; alert("Time's up! Save your session."); } },1000); }
-    function pauseTimer() { isRunning=false; if(timerInterval) clearInterval(timerInterval); timerInterval=null; }
-    function resetTimer() { pauseTimer(); timeLeft=25*60; updateTimerDisplay(); }
-    function updateTimerDisplay() { const m=Math.floor(timeLeft/60), s=timeLeft%60; document.getElementById("timerLabel").innerText=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+    function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
     
-    // ==================== WORD VAULT ====================
-    let words = [];
-    function loadWords() { const stored = localStorage.getItem(STORAGE.WORDS); if(stored) words = JSON.parse(stored); else words = []; renderWords(); }
-    function saveWords() { localStorage.setItem(STORAGE.WORDS, JSON.stringify(words)); renderWords(); }
-    function addWord(term, meaning, synonyms, antonyms, reviewDate) { if(!term.trim() || !meaning.trim()) return; words.push({ id:Date.now(), term:term.trim(), meaning:meaning.trim(), synonyms:synonyms||"", antonyms:antonyms||"", reviewDate:reviewDate||"", createdAt:getTodayStr() }); saveWords(); }
-    let currentWordFilter = "all";
-    function renderWords() {
-        const container = document.getElementById("wordsListContainer"); if(!container) return;
-        const today = getTodayStr();
-        let filtered = words;
-        if(currentWordFilter === "due") filtered = words.filter(w => w.reviewDate === today);
-        if(filtered.length===0) { container.innerHTML="<div style='padding:1rem; text-align:center;'>📚 No words yet. Add your first word above!</div>"; return; }
-        container.innerHTML = filtered.map(w => `
-            <div class="word-card ${w.reviewDate === today ? 'due-today' : ''}">
-                <div class="word-term">📖 ${escapeHtml(w.term)}</div>
-                <div class="word-meaning">📖 ${escapeHtml(w.meaning)}</div>
-                ${w.synonyms ? `<div class="word-synonyms">🔗 Synonyms: ${escapeHtml(w.synonyms)}</div>` : ''}
-                ${w.antonyms ? `<div class="word-antonyms">🚫 Antonyms: ${escapeHtml(w.antonyms)}</div>` : ''}
-                <div class="review-badge">📅 Review: ${w.reviewDate || 'No date set'}</div>
-                <button data-id="${w.id}" class="delete-word-btn" style="margin-top:8px; background:#ef4444; padding:4px 12px; font-size:0.7rem;">Delete</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.delete-word-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); words = words.filter(w=>w.id!==id); saveWords(); });
-        });
+    // ========== FLEX PAGE (Blank Canvas) ==========
+    let flexData = { heading: "✨ My Creative Space", content: "", textColor: "#1e293b", bgColor: "#fff9f0" };
+    function loadFlex() {
+        const saved = localStorage.getItem(STORAGE.FLEX);
+        if(saved) { flexData = JSON.parse(saved); }
+        document.getElementById("flexHeading").value = flexData.heading;
+        document.getElementById("flexContent").value = flexData.content;
+        document.getElementById("textColorPicker").value = flexData.textColor;
+        document.getElementById("bgColorPicker").value = flexData.bgColor;
+        applyFlexStyles();
     }
-    
-    // ==================== HEALTH TRACKER ====================
-    let healthLogs = [];
-    function loadHealth() { const stored = localStorage.getItem(STORAGE.HEALTH); if(stored) healthLogs = JSON.parse(stored); else healthLogs = []; renderHealth(); updateHealthSummary(); }
-    function saveHealth() { localStorage.setItem(STORAGE.HEALTH, JSON.stringify(healthLogs)); renderHealth(); updateHealthSummary(); }
-    function addHealthEntry(date, foodOk, workoutOk) {
-        const existing = healthLogs.findIndex(h=>h.date===date);
-        const entry = { date, food: foodOk, workout: workoutOk, timestamp:Date.now() };
-        if(existing>=0) healthLogs[existing] = entry;
-        else healthLogs.unshift(entry);
-        healthLogs.sort((a,b)=>b.date.localeCompare(a.date));
-        saveHealth();
+    function applyFlexStyles() {
+        const textarea = document.getElementById("flexContent");
+        textarea.style.color = flexData.textColor;
+        textarea.style.backgroundColor = flexData.bgColor;
+        document.documentElement.style.setProperty('--canvas-bg', flexData.bgColor);
+        document.documentElement.style.setProperty('--canvas-text', flexData.textColor);
     }
-    function renderHealth() {
-        const container = document.getElementById("healthEntriesList"); if(!container) return;
-        if(healthLogs.length===0) { container.innerHTML="<div style='padding:1rem;'>No health logs yet. Start tracking your meals and workouts!</div>"; return; }
-        container.innerHTML = healthLogs.map(log => `
-            <div class="health-entry">
-                <div class="health-date">📅 ${log.date}</div>
-                <div>🍽️ Proper Food: ${log.food ? '✅ Yes' : '❌ No'}</div>
-                <div>🏋️ Workout: ${log.workout ? '✅ Done' : '❌ Not done'}</div>
-                <button data-date="${log.date}" class="delete-health-btn" style="margin-top:6px; background:#dc2626; padding:4px 12px; font-size:0.7rem;">Delete</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.delete-health-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => { const date = btn.dataset.date; healthLogs = healthLogs.filter(h=>h.date!==date); saveHealth(); });
-        });
+    function saveFlex() {
+        flexData.heading = document.getElementById("flexHeading").value;
+        flexData.content = document.getElementById("flexContent").value;
+        flexData.textColor = document.getElementById("textColorPicker").value;
+        flexData.bgColor = document.getElementById("bgColorPicker").value;
+        localStorage.setItem(STORAGE.FLEX, JSON.stringify(flexData));
+        applyFlexStyles();
+        const statusDiv = document.createElement('div'); statusDiv.style.position='fixed'; statusDiv.style.bottom='20px'; statusDiv.style.right='20px'; statusDiv.style.background='var(--success)'; statusDiv.style.color='white'; statusDiv.style.padding='6px 12px'; statusDiv.style.borderRadius='20px'; statusDiv.style.fontSize='12px'; statusDiv.innerText='✅ Canvas saved'; document.body.appendChild(statusDiv); setTimeout(()=>statusDiv.remove(),1500);
     }
-    function updateHealthSummary() {
-        const totalDays = healthLogs.length;
-        const goodFoodDays = healthLogs.filter(h=>h.food).length;
-        const workoutDays = healthLogs.filter(h=>h.workout).length;
-        const summaryDiv = document.getElementById("healthSummary");
-        if(summaryDiv) summaryDiv.innerHTML = `
-            <div class="stat-card">📊 Total Logged: ${totalDays} days</div>
-            <div class="stat-card">🥗 Proper Food: ${goodFoodDays} days</div>
-            <div class="stat-card">💪 Workout Done: ${workoutDays} days</div>
-            <div class="stat-card">🏆 Consistency: ${totalDays>0 ? Math.round((workoutDays/totalDays)*100) : 0}%</div>
-        `;
-    }
+    function clearFlexContent() { if(confirm("Clear all canvas content? This cannot be undone.")) { document.getElementById("flexContent").value = ""; saveFlex(); } }
+    function resetFlexColors() { document.getElementById("textColorPicker").value = "#1e293b"; document.getElementById("bgColorPicker").value = "#fff9f0"; saveFlex(); }
     
-    // ==================== AIM ====================
-    function loadAim() { const saved = localStorage.getItem(STORAGE.AIM); if(saved) document.getElementById("aimTextArea").value = saved; else document.getElementById("aimTextArea").value = "✨ My yearly aim: Build discipline, expand vocabulary, stay fit, and grow every single day."; }
-    function saveAim() { localStorage.setItem(STORAGE.AIM, document.getElementById("aimTextArea").value); const status=document.getElementById("aimStatus"); status.innerText="✅ Aim saved!"; setTimeout(()=>status.innerText="",2000); }
+    // ========== OTHER MODULES (simplified but functional) ==========
+    let todos=[], pomodoroSessions=[], words=[], healthLogs=[], yearEntries=[];
+    let timerInterval=null, timeLeft=25*60, isRunning=false, pomoChart=null;
     
-    // ==================== YEAR TRACKER ====================
-    let yearEntries = [];
-    function loadYearTracker() { const stored = localStorage.getItem(STORAGE.YEAR_TRACK); if(stored) yearEntries = JSON.parse(stored); else yearEntries = []; renderTrackEntries(); }
-    function saveYearTracker() { localStorage.setItem(STORAGE.YEAR_TRACK, JSON.stringify(yearEntries)); renderTrackEntries(); }
-    function addYearEntry(date, text) { if(!text.trim()) return; yearEntries.unshift({ date, text:text.trim(), timestamp:Date.now() }); if(yearEntries.length>200) yearEntries.pop(); saveYearTracker(); }
-    function renderTrackEntries() { const container=document.getElementById("trackEntriesList"); if(!container) return; if(yearEntries.length===0) { container.innerHTML="<div>No entries yet.</div>"; return; } container.innerHTML = yearEntries.slice(0,40).map(e=>`<div style="background:#f9f9ff; border-radius:16px; padding:8px 12px; margin-bottom:8px;"><strong>📅 ${e.date}</strong><br>${escapeHtml(e.text)}</div>`).join(''); }
+    function loadTodos() { const s=localStorage.getItem(STORAGE.TODOS); todos=s?JSON.parse(s):[{id:Date.now(),title:"Explore Flex Canvas",priority:"medium",dueDate:getTodayStr(),completed:false}]; saveTodos(); renderTodos(); }
+    function saveTodos() { localStorage.setItem(STORAGE.TODOS,JSON.stringify(todos)); }
+    function renderTodos() { const c=document.getElementById("todo-list-container"); if(!c) return; if(todos.length===0){c.innerHTML="<div>✨ No tasks</div>";return;} c.innerHTML=todos.map(t=>`<div style="display:flex;gap:10px;background:var(--bg-primary);margin-bottom:8px;padding:10px;border-radius:20px;"><div style="width:8px;border-radius:10px;background:${t.priority==='high'?'#ef4444':t.priority==='medium'?'#f97316':'#22c55e'}"></div><div style="flex:1"><div style="text-decoration:${t.completed?'line-through':'none'}">${escapeHtml(t.title)}</div><small>${t.dueDate||''}</small></div><button data-id="${t.id}" class="toggle-todo">✓</button><button data-id="${t.id}" class="delete-todo">🗑️</button></div>`).join('');
+        document.querySelectorAll('.toggle-todo').forEach(b=>{ b.onclick=()=>{ let tt=todos.find(t=>t.id==parseInt(b.dataset.id)); if(tt) tt.completed=!tt.completed; saveTodos(); renderTodos(); }; });
+        document.querySelectorAll('.delete-todo').forEach(b=>{ b.onclick=()=>{ todos=todos.filter(t=>t.id!=parseInt(b.dataset.id)); saveTodos(); renderTodos(); }; }); }
+    function addTodo(title,priority,due){ if(title.trim()){ todos.push({id:Date.now(),title:title.trim(),priority,dueDate:due,completed:false}); saveTodos(); renderTodos(); } }
     
-    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function loadPomodoro() { const s=localStorage.getItem(STORAGE.POMO_SESSIONS); pomodoroSessions=s?JSON.parse(s):[]; updateStats(); renderPomoChart(); }
+    function savePomodoro() { localStorage.setItem(STORAGE.POMO_SESSIONS,JSON.stringify(pomodoroSessions)); updateStats(); renderPomoChart(); }
+    function updateStats() { document.getElementById("sessionCountToday").innerText=pomodoroSessions.find(e=>e.date===getTodayStr())?.count||0; document.getElementById("totalSessionsYear").innerText=pomodoroSessions.reduce((a,b)=>a+b.count,0); }
+    function addPomodoroSession() { let t=getTodayStr(); let i=pomodoroSessions.findIndex(e=>e.date===t); if(i>=0) pomodoroSessions[i].count++; else pomodoroSessions.push({date:t,count:1}); savePomodoro(); }
+    function renderPomoChart() { const canvas=document.getElementById("pomoChart"); if(!canvas) return; let labels=[], data=[]; for(let i=29;i>=0;i--){ let d=new Date(); d.setDate(d.getDate()-i); let ds=d.toISOString().slice(0,10); labels.push(ds.slice(5)); let s=pomodoroSessions.find(e=>e.date===ds); data.push(s?s.count:0); } if(pomoChart){ pomoChart.data.labels=labels; pomoChart.data.datasets[0].data=data; pomoChart.update(); } else { pomoChart=new Chart(canvas,{type:'bar',data:{labels,datasets:[{label:'Pomodoros',data,backgroundColor:'#3b82f6'}]},options:{responsive:true}}); } }
+    function updateTimerDisplay(){ let m=Math.floor(timeLeft/60),s=timeLeft%60; document.getElementById("timerLabel").innerText=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+    function startTimer(){ if(timerInterval) clearInterval(timerInterval); isRunning=true; timerInterval=setInterval(()=>{ if(timeLeft>0&&isRunning){ timeLeft--; updateTimerDisplay(); } else if(timeLeft===0&&isRunning){ clearInterval(timerInterval); isRunning=false; alert("Time's up! Save session."); } },1000); }
+    function pauseTimer(){ isRunning=false; if(timerInterval) clearInterval(timerInterval); timerInterval=null; }
+    function resetTimer(){ pauseTimer(); timeLeft=25*60; updateTimerDisplay(); }
+    function setTimer(minutes){ pauseTimer(); timeLeft=minutes*60; updateTimerDisplay(); }
     
-    // ==================== UI TABS ====================
-    function switchTab(tabId) {
-        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active-panel'));
-        document.getElementById(tabId).classList.add('active-panel');
-        document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.remove('active'));
-        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
-        if(tabId === 'tab-pomo' && pomoChart) pomoChart.update();
-        if(tabId === 'tab-words') renderWords();
-        if(tabId === 'tab-health') { renderHealth(); updateHealthSummary(); }
-    }
+    function loadWords(){ const s=localStorage.getItem(STORAGE.WORDS); words=s?JSON.parse(s):[]; renderWords(); }
+    function saveWords(){ localStorage.setItem(STORAGE.WORDS,JSON.stringify(words)); renderWords(); }
+    function addWord(t,m,syn,ant,rd){ if(t.trim()&&m.trim()){ words.push({id:Date.now(),term:t.trim(),meaning:m.trim(),synonyms:syn||"",antonyms:ant||"",reviewDate:rd||""}); saveWords(); } }
+    function renderWords(){ const c=document.getElementById("wordsListContainer"); if(!c) return; if(words.length===0){c.innerHTML="<div>No words yet</div>";return;} c.innerHTML=words.map(w=>`<div style="background:var(--bg-primary);border-radius:16px;padding:10px;margin-bottom:8px;"><strong>📖 ${escapeHtml(w.term)}</strong><br>${escapeHtml(w.meaning)}<br>🔗 ${w.synonyms||'-'} | 🚫 ${w.antonyms||'-'}<br><small>Review: ${w.reviewDate||'none'}</small><button data-id="${w.id}" class="del-word" style="margin-top:5px;background:#ef4444;padding:2px 12px;">Delete</button></div>`).join('');
+        document.querySelectorAll('.del-word').forEach(b=>{ b.onclick=()=>{ words=words.filter(w=>w.id!=parseInt(b.dataset.id)); saveWords(); }; }); }
     
-    // ==================== INIT & EVENT LISTENERS ====================
+    function loadHealth(){ const s=localStorage.getItem(STORAGE.HEALTH); healthLogs=s?JSON.parse(s):[]; renderHealth(); updateHealthSummary(); }
+    function saveHealth(){ localStorage.setItem(STORAGE.HEALTH,JSON.stringify(healthLogs)); renderHealth(); updateHealthSummary(); }
+    function addHealthEntry(date,food,workout){ let idx=healthLogs.findIndex(h=>h.date===date); if(idx>=0) healthLogs[idx]={date,food,workout}; else healthLogs.unshift({date,food,workout}); healthLogs.sort((a,b)=>b.date.localeCompare(a.date)); saveHealth(); }
+    function renderHealth(){ const c=document.getElementById("healthEntriesList"); if(!c) return; if(healthLogs.length===0){c.innerHTML="<div>No logs</div>";return;} c.innerHTML=healthLogs.map(h=>`<div style="background:var(--bg-primary);border-radius:16px;padding:8px;margin-bottom:6px;"><strong>${h.date}</strong><br>🥗 ${h.food?'✅':'❌'} | 🏋️ ${h.workout?'✅':'❌'}<button data-date="${h.date}" class="del-health" style="margin-left:10px;background:#ef4444;padding:2px 10px;">Del</button></div>`).join('');
+        document.querySelectorAll('.del-health').forEach(b=>{ b.onclick=()=>{ healthLogs=healthLogs.filter(h=>h.date!==b.dataset.date); saveHealth(); }; }); }
+    function updateHealthSummary(){ const total=healthLogs.length, food=healthLogs.filter(h=>h.food).length, work=healthLogs.filter(h=>h.workout).length; document.getElementById("healthSummary").innerHTML=`<div class="stat-card">📊 ${total} days</div><div class="stat-card">🥗 Food: ${food}</div><div class="stat-card">💪 Workout: ${work}</div><div class="stat-card">🏆 ${total>0?Math.round(work/total*100):0}%</div>`; }
+    
+    function loadAim(){ const s=localStorage.getItem(STORAGE.AIM); document.getElementById("aimTextArea").value=s? s:"✨ My aim: Stay consistent, learn daily."; }
+    function saveAim(){ localStorage.setItem(STORAGE.AIM, document.getElementById("aimTextArea").value); alert("Aim saved!"); }
+    
+    function loadYearTracker(){ const s=localStorage.getItem(STORAGE.YEAR_TRACK); yearEntries=s?JSON.parse(s):[]; }
+    function renderMasterTable(){ const body=document.getElementById("tableBody"); if(!body) return; let rows=[]; todos.forEach(t=>rows.push(`<tr><td>${t.dueDate||'No date'}</td><td>To-Do</td><td>${escapeHtml(t.title)} (${t.priority}) ${t.completed?'✓':''}</td></tr>`)); healthLogs.forEach(h=>rows.push(`<tr><td>${h.date}</td><td>Health</td><td>Food:${h.food?'✅':'❌'} Workout:${h.workout?'✅':'❌'}</td></tr>`)); words.forEach(w=>rows.push(`<tr><td>${w.reviewDate||'Added'}</td><td>Word</td><td>${escapeHtml(w.term)}: ${escapeHtml(w.meaning)}</td></tr>`)); yearEntries.slice(0,30).forEach(y=>rows.push(`<tr><td>${y.date}</td><td>Year Log</td><td>${escapeHtml(y.text)}</td></tr>`)); if(rows.length===0) body.innerHTML='<tr><td colspan="3">No data yet</td></tr>'; else body.innerHTML=rows.join(''); }
+    
+    // ========== INIT & EVENT LISTENERS ==========
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById("yearDisplay").innerHTML = `📅 ${new Date().getFullYear()} · Rolling Data`;
-        loadTodos(); loadPomodoro(); loadWords(); loadHealth(); loadAim(); loadYearTracker();
+        initTheme(); loadFlex(); loadTodos(); loadPomodoro(); loadWords(); loadHealth(); loadAim(); loadYearTracker(); renderMasterTable();
+        document.getElementById("themeToggleBtn").onclick=toggleTheme;
+        document.getElementById("addTodoBtn").onclick=()=>{ addTodo(document.getElementById("todoTitle").value, document.getElementById("todoPriority").value, document.getElementById("todoDue").value); document.getElementById("todoTitle").value=""; };
+        document.getElementById("pomoStart").onclick=startTimer; document.getElementById("pomoPause").onclick=pauseTimer; document.getElementById("pomoReset").onclick=resetTimer;
+        document.getElementById("logSessionBtn").onclick=()=>{ addPomodoroSession(); resetTimer(); };
+        document.querySelectorAll(".preset-btn").forEach(btn=>{ btn.onclick=()=>{ setTimer(parseInt(btn.dataset.minutes)); }; });
+        document.getElementById("setCustomTimer").onclick=()=>{ let mins=parseInt(document.getElementById("customMinutes").value); if(mins>0) setTimer(mins); };
+        document.getElementById("addWordBtn").onclick=()=>{ addWord(document.getElementById("wordTerm").value, document.getElementById("wordMeaning").value, document.getElementById("wordSynonyms").value, document.getElementById("wordAntonyms").value, document.getElementById("wordReviewDate").value); document.getElementById("wordTerm").value=""; document.getElementById("wordMeaning").value=""; document.getElementById("wordSynonyms").value=""; document.getElementById("wordAntonyms").value=""; };
+        document.getElementById("addHealthEntryBtn").onclick=()=>{ addHealthEntry(document.getElementById("healthDate").value||getTodayStr(), document.getElementById("foodCheck").checked, document.getElementById("workoutCheck").checked); document.getElementById("foodCheck").checked=false; document.getElementById("workoutCheck").checked=false; };
+        document.getElementById("saveAimBtn").onclick=saveAim;
+        document.getElementById("refreshTableBtn").onclick=renderMasterTable;
+        document.getElementById("playLofi").onclick=()=>playStudyMusic("lofi");
+        document.getElementById("playNature").onclick=()=>playStudyMusic("nature");
+        document.getElementById("playPiano").onclick=()=>playStudyMusic("piano");
+        document.getElementById("stopMusic").onclick=stopMusic;
+        document.getElementById("volumeSlider").oninput=e=>setVolume(e.target.value);
+        document.getElementById("saveFlexNow").onclick=saveFlex;
+        document.getElementById("clearFlexContent").onclick=clearFlexContent;
+        document.getElementById("resetFlexColors").onclick=resetFlexColors;
+        document.getElementById("flexHeading").onchange=saveFlex;
+        document.getElementById("flexContent").oninput=saveFlex;
+        document.getElementById("textColorPicker").onchange=saveFlex;
+        document.getElementById("bgColorPicker").onchange=saveFlex;
+        document.getElementById("healthDate").value=getTodayStr();
+        document.querySelectorAll(".tab-btn").forEach(btn=>{ btn.onclick=()=>{ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active-panel')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(btn.dataset.tab).classList.add('active-panel'); btn.classList.add('active'); if(btn.dataset.tab==='tab-table') renderMasterTable(); if(btn.dataset.tab==='tab-flex') applyFlexStyles(); }; });
         resetTimer(); updateTimerDisplay();
-        
-        document.getElementById("addTodoBtn")?.addEventListener("click", () => { addTodo(document.getElementById("todoTitle").value, document.getElementById("todoPriority").value, document.getElementById("todoDue").value); document.getElementById("todoTitle").value=""; });
-        document.getElementById("pomoStart")?.addEventListener("click", startTimer);
-        document.getElementById("pomoPause")?.addEventListener("click", pauseTimer);
-        document.getElementById("pomoReset")?.addEventListener("click", resetTimer);
-        document.getElementById("logSessionBtn")?.addEventListener("click", () => { addPomodoroSession(); resetTimer(); });
-        
-        document.getElementById("addWordBtn")?.addEventListener("click", () => { addWord(document.getElementById("wordTerm").value, document.getElementById("wordMeaning").value, document.getElementById("wordSynonyms").value, document.getElementById("wordAntonyms").value, document.getElementById("wordReviewDate").value); document.getElementById("wordTerm").value=""; document.getElementById("wordMeaning").value=""; document.getElementById("wordSynonyms").value=""; document.getElementById("wordAntonyms").value=""; document.getElementById("wordReviewDate").value=""; });
-        document.getElementById("filterAllWords")?.addEventListener("click", () => { currentWordFilter="all"; renderWords(); });
-        document.getElementById("filterDueToday")?.addEventListener("click", () => { currentWordFilter="due"; renderWords(); });
-        
-        document.getElementById("addHealthEntryBtn")?.addEventListener("click", () => { const date = document.getElementById("healthDate").value || getTodayStr(); const food = document.getElementById("foodCheck").checked; const workout = document.getElementById("workoutCheck").checked; addHealthEntry(date, food, workout); document.getElementById("foodCheck").checked=false; document.getElementById("workoutCheck").checked=false; });
-        document.getElementById("clearHealthData")?.addEventListener("click", () => { if(confirm("Delete ALL health data?")) { healthLogs=[]; saveHealth(); } });
-        
-        document.getElementById("saveAimBtn")?.addEventListener("click", saveAim);
-        document.getElementById("addTrackBtn")?.addEventListener("click", () => { addYearEntry(document.getElementById("trackDate").value || getTodayStr(), document.getElementById("trackValue").value); document.getElementById("trackValue").value=""; });
-        document.getElementById("clearAllYearData")?.addEventListener("click", () => { if(confirm("Clear all yearly tracker entries?")) { yearEntries=[]; saveYearTracker(); } });
-        
-        document.querySelectorAll(".tab-btn").forEach(btn => { btn.addEventListener("click", (e) => { const tabId = btn.getAttribute("data-tab"); if(tabId) switchTab(tabId); }); });
-        
-        // set default health date
-        document.getElementById("healthDate").value = getTodayStr();
     });
 </script>
 </body>

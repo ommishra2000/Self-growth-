@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>| Complete Life Dashboard 🌱🧠💪 📈🚀</title>
+      <link rel="icon" type="image/x-icon" href="download.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 2rem 1.5rem;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .year-badge {
+            background: white;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 500;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: 0.2s;
+            color: #475569;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            background: #ffffff;
+            color: #2563eb;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-bottom: 2px solid #2563eb;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #e6edf5;
+        }
+
+        .panel {
+            display: none;
+            animation: fade 0.2s ease;
+        }
+        .panel.active-panel {
+            display: block;
+        }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(6px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.8rem;
+        }
+
+        /* Todo */
+        .todo-item {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #eef2ff;
+        }
+        .todo-priority { width: 10px; height: 40px; border-radius: 20px; }
+        .priority-high { background: #ef4444; }
+        .priority-medium { background: #f97316; }
+        .priority-low { background: #22c55e; }
+        .todo-content { flex: 1; }
+        .todo-text { font-weight: 500; }
+        .todo-due { font-size: 0.7rem; color: #64748b; }
+        .todo-actions button {
+            background: none; border: none; font-size: 1.2rem; cursor: pointer; margin: 0 4px;
+        }
+        .add-todo-form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
+        
+        input, select, textarea {
+            padding: 0.7rem 1rem;
+            border-radius: 40px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #1e293b;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.primary { background: #2563eb; }
+        button.success { background: #10b981; }
+        button.warning { background: #f59e0b; }
+        
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            font-family: monospace;
+            text-align: center;
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 60px;
+        }
+        .pomo-buttons { display: flex; justify-content: center; gap: 1rem; margin: 1rem 0; }
+        canvas { max-width: 100%; background: white; border-radius: 24px; }
+
+        /* Word Vault */
+        .word-card {
+            background: #fefce8;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 6px solid #8b5cf6;
+        }
+        .word-term { font-size: 1.3rem; font-weight: 700; color: #4c1d95; }
+        .review-badge {
+            display: inline-block; background: #e0e7ff; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
+        }
+        .due-today { background: #fef3c7; border-left-color: #f97316; }
+        .form-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+        
+        /* Health Tracker */
+        .health-entry {
+            background: #ecfdf5;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            border-left: 6px solid #10b981;
+        }
+        .health-date { font-weight: 700; color: #065f46; margin-bottom: 8px; }
+        .health-icons { display: flex; gap: 1rem; margin-top: 6px; }
+        .food-good { color: #16a34a; font-weight: 600; }
+        .workout-good { color: #16a34a; font-weight: 600; }
+        .stats-summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .stat-card { background: #f3f4f6; border-radius: 20px; padding: 0.8rem 1.2rem; text-align: center; flex: 1; }
+
+        hr { margin: 1rem 0; }
+        footer { text-align: center; margin-top: 2rem; font-size: 0.75rem; color: #64748b; }
+        @media (max-width: 640px) { body { padding: 1rem; } .timer-display { font-size: 2.5rem; } }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <h1>📆 Year Compass · Complete Tracker</h1>
+        <div class="year-badge" id="yearDisplay"></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-todo">✅ To-Do</button>
+        <button class="tab-btn" data-tab="tab-pomo">🍅 Pomodoro</button>
+        <button class="tab-btn" data-tab="tab-words">📖 Word Vault</button>
+        <button class="tab-btn" data-tab="tab-health">💪 Health Tracker</button>
+        <button class="tab-btn" data-tab="tab-aim">🎯 My Aim</button>
+        <button class="tab-btn" data-tab="tab-track">📊 Year Data</button>
+    </div>
+
+    <!-- PANEL 1: TO-DO -->
+    <div id="tab-todo" class="panel active-panel">
+        <div class="card">
+            <div class="card-title">📋 Prioritized Task Manager</div>
+            <div id="todo-list-container"></div>
+            <div class="add-todo-form">
+                <input type="text" id="todoTitle" placeholder="Task title" style="flex:2;">
+                <select id="todoPriority">
+                    <option value="high">🔥 High</option>
+                    <option value="medium">⚡ Medium</option>
+                    <option value="low">🌿 Low</option>
+                </select>
+                <input type="date" id="todoDue">
+                <button id="addTodoBtn" class="primary">+ Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 2: POMODORO -->
+    <div id="tab-pomo" class="panel">
+        <div class="grid-2col">
+            <div class="card">
+                <div class="card-title">🍅 Focus Timer</div>
+                <div class="timer-display" id="timerLabel">25:00</div>
+                <div class="pomo-buttons">
+                    <button id="pomoStart">▶ Start</button>
+                    <button id="pomoPause">⏸ Pause</button>
+                    <button id="pomoReset">🔄 Reset</button>
+                </div>
+                <div style="background:#eef2ff; border-radius:24px; padding:1rem; text-align:center;">
+                    <div>✅ Today: <strong id="sessionCountToday">0</strong></div>
+                    <div>📅 Year total: <strong id="totalSessionsYear">0</strong></div>
+                    <button id="logSessionBtn" style="margin-top:8px; background:#22c55e;">💾 Save session</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📈 Pomodoro History (30d)</div>
+                <canvas id="pomoChart" width="400" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 3: WORD VAULT -->
+    <div id="tab-words" class="panel">
+        <div class="card">
+            <div class="card-title">📖 Word Vault · Learn & Review</div>
+            <div style="background:#f9f9ff; border-radius:24px; padding:1rem; margin-bottom:1.5rem;">
+                <div class="form-row">
+                    <input type="text" id="wordTerm" placeholder="Word" style="flex:1.5;">
+                    <input type="text" id="wordMeaning" placeholder="Meaning" style="flex:2;">
+                </div>
+                <div class="form-row">
+                    <input type="text" id="wordSynonyms" placeholder="Synonyms (comma)" style="flex:1;">
+                    <input type="text" id="wordAntonyms" placeholder="Antonyms (comma)" style="flex:1;">
+                    <input type="date" id="wordReviewDate">
+                </div>
+                <button id="addWordBtn" class="primary">➕ Add Word</button>
+            </div>
+            <div class="word-filter">
+                <button id="filterAllWords" class="secondary">All Words</button>
+                <button id="filterDueToday" class="warning">Due Today</button>
+            </div>
+            <div id="wordsListContainer"></div>
+        </div>
+    </div>
+
+    <!-- PANEL 4: HEALTH TRACKER (Food & Workout) -->
+    <div id="tab-health" class="panel">
+        <div class="card">
+            <div class="card-title">💪 Health Tracker · Food & Workout</div>
+            <div class="stats-summary" id="healthSummary"></div>
+            <div style="background:#f0fdf4; border-radius:24px; padding:1rem; margin-bottom:1.5rem;">
+                <div class="form-row">
+                    <input type="date" id="healthDate" value="">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="foodCheck"> 🥗 Proper Food
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="workoutCheck"> 🏋️ Workout Done
+                    </label>
+                    <button id="addHealthEntryBtn" class="success">✅ Log Today</button>
+                </div>
+            </div>
+            <div id="healthEntriesList"></div>
+            <button id="clearHealthData" class="warning" style="margin-top:1rem; background:#dc2626;">Clear All Health Data</button>
+        </div>
+    </div>
+
+    <!-- PANEL 5: AIM -->
+    <div id="tab-aim" class="panel">
+        <div class="card">
+            <div class="card-title">🌟 My North Star · Aim</div>
+            <textarea id="aimTextArea" rows="6" style="width:100%; border-radius:24px; padding:1rem; border:1px solid #cbd5e1;"></textarea>
+            <button id="saveAimBtn" style="margin-top:1rem;">💾 Save Aim</button>
+            <div id="aimStatus" style="margin-top:0.5rem; font-size:0.8rem;"></div>
+        </div>
+    </div>
+
+    <!-- PANEL 6: YEAR DATA TRACKER -->
+    <div id="tab-track" class="panel">
+        <div class="card">
+            <div class="card-title">📆 One Year Data Logger</div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <input type="date" id="trackDate">
+                <input type="text" id="trackValue" placeholder="e.g., Milestone, mood, reflection">
+                <button id="addTrackBtn" class="primary">➕ Add entry</button>
+            </div>
+            <hr>
+            <div id="trackEntriesList" style="max-height: 280px; overflow-y: auto;"></div>
+            <button id="clearAllYearData" style="background:#b91c1c; margin-top:12px;">⚠️ Clear all yearly data</button>
+        </div>
+    </div>
+    <footer>✨ All data stored locally • One-year tracking • Word review & health logs persist</footer>
+</div>
+
+<script>
+    // ==================== STORAGE KEYS ====================
+    const STORAGE = {
+        TODOS: "zenith_todos",
+        POMO_SESSIONS: "zenith_pomo_sessions",
+        AIM: "zenith_aim_text",
+        YEAR_TRACK: "zenith_year_track_entries",
+        WORDS: "zenith_word_vault",
+        HEALTH: "zenith_health_logs"
+    };
+
+    // Helper
+    function getTodayStr() { return new Date().toISOString().slice(0,10); }
+
+    // ==================== TO-DO ====================
+    let todos = [];
+    function loadTodos() {
+        const stored = localStorage.getItem(STORAGE.TODOS);
+        if(stored) todos = JSON.parse(stored);
+        else todos = [
+            { id: Date.now()+1, title: "Review Word Vault daily", priority: "medium", dueDate: getTodayStr(), completed: false },
+            { id: Date.now()+2, title: "Log food & workout", priority: "high", dueDate: getTodayStr(), completed: false }
+        ];
+        saveTodos();
+        renderTodos();
+    }
+    function saveTodos() { localStorage.setItem(STORAGE.TODOS, JSON.stringify(todos)); }
+    function renderTodos() {
+        const container = document.getElementById("todo-list-container");
+        if(!container) return;
+        if(todos.length === 0) { container.innerHTML = "<div style='padding:1rem;'>✨ No tasks</div>"; return; }
+        const priorityOrder = { high:1, medium:2, low:3 };
+        const sorted = [...todos].sort((a,b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+        container.innerHTML = sorted.map(todo => `
+            <div class="todo-item" style="opacity: ${todo.completed ? 0.6 : 1};">
+                <div class="todo-priority priority-${todo.priority}"></div>
+                <div class="todo-content">
+                    <div class="todo-text" style="text-decoration: ${todo.completed ? 'line-through' : 'none'}">${escapeHtml(todo.title)}</div>
+                    <div class="todo-due">📅 ${todo.dueDate || 'No due'} • ${todo.priority}</div>
+                </div>
+                <div class="todo-actions">
+                    <button data-id="${todo.id}" class="toggle-todo">✓</button>
+                    <button data-id="${todo.id}" class="delete-todo">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.toggle-todo').forEach(btn => {
+            btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); const task = todos.find(t=>t.id===id); if(task) task.completed=!task.completed; saveTodos(); renderTodos(); });
+        });
+        document.querySelectorAll('.delete-todo').forEach(btn => {
+            btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); todos = todos.filter(t=>t.id!==id); saveTodos(); renderTodos(); });
+        });
+    }
+    function addTodo(title, priority, dueDate) { if(!title.trim()) return; todos.push({ id:Date.now(), title:title.trim(), priority, dueDate, completed:false }); saveTodos(); renderTodos(); }
+
+    // ==================== POMODORO ====================
+    let pomodoroSessions = [];
+    let timerInterval = null, timeLeft = 25*60, isRunning = false;
+    let pomoChart = null;
+    function loadPomodoro() { const stored = localStorage.getItem(STORAGE.POMO_SESSIONS); if(stored) pomodoroSessions = JSON.parse(stored); else pomodoroSessions = []; updatePomoStatsAndGraph(); }
+    function savePomodoro() { localStorage.setItem(STORAGE.POMO_SESSIONS, JSON.stringify(pomodoroSessions)); updatePomoStatsAndGraph(); }
+    function getTodaySessions() { const today = getTodayStr(); const entry = pomodoroSessions.find(e=>e.date===today); return entry ? entry.count : 0; }
+    function updatePomoStatsAndGraph() {
+        document.getElementById("sessionCountToday").innerText = getTodaySessions();
+        document.getElementById("totalSessionsYear").innerText = pomodoroSessions.reduce((s,e)=>s+e.count,0);
+        renderPomoChart();
+    }
+    function addPomodoroSession() { const today = getTodayStr(); const idx = pomodoroSessions.findIndex(e=>e.date===today); if(idx>=0) pomodoroSessions[idx].count++; else pomodoroSessions.push({date:today, count:1}); savePomodoro(); }
+    function renderPomoChart() {
+        const canvas = document.getElementById("pomoChart"); if(!canvas) return;
+        const ctx = canvas.getContext('2d'); const labels=[], data=[];
+        for(let i=29;i>=0;i--) { const d=new Date(); d.setDate(d.getDate()-i); const ds=d.toISOString().slice(0,10); labels.push(ds.slice(5)); const s = pomodoroSessions.find(e=>e.date===ds); data.push(s? s.count:0); }
+        if(pomoChart) { pomoChart.data.labels=labels; pomoChart.data.datasets[0].data=data; pomoChart.update(); }
+        else { pomoChart = new Chart(ctx, { type:'bar', data:{ labels, datasets:[{ label:'🍅 Pomodoros', data, backgroundColor:'#3b82f6', borderRadius:10 }] }, options:{ responsive:true } }); }
+    }
+    function startTimer() { if(timerInterval) clearInterval(timerInterval); isRunning=true; timerInterval=setInterval(()=>{ if(timeLeft>0 && isRunning) { timeLeft--; updateTimerDisplay(); } else if(timeLeft===0 && isRunning) { clearInterval(timerInterval); isRunning=false; alert("Time's up! Save your session."); } },1000); }
+    function pauseTimer() { isRunning=false; if(timerInterval) clearInterval(timerInterval); timerInterval=null; }
+    function resetTimer() { pauseTimer(); timeLeft=25*60; updateTimerDisplay(); }
+    function updateTimerDisplay() { const m=Math.floor(timeLeft/60), s=timeLeft%60; document.getElementById("timerLabel").innerText=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+    
+    // ==================== WORD VAULT ====================
+    let words = [];
+    function loadWords() { const stored = localStorage.getItem(STORAGE.WORDS); if(stored) words = JSON.parse(stored); else words = []; renderWords(); }
+    function saveWords() { localStorage.setItem(STORAGE.WORDS, JSON.stringify(words)); renderWords(); }
+    function addWord(term, meaning, synonyms, antonyms, reviewDate) { if(!term.trim() || !meaning.trim()) return; words.push({ id:Date.now(), term:term.trim(), meaning:meaning.trim(), synonyms:synonyms||"", antonyms:antonyms||"", reviewDate:reviewDate||"", createdAt:getTodayStr() }); saveWords(); }
+    let currentWordFilter = "all";
+    function renderWords() {
+        const container = document.getElementById("wordsListContainer"); if(!container) return;
+        const today = getTodayStr();
+        let filtered = words;
+        if(currentWordFilter === "due") filtered = words.filter(w => w.reviewDate === today);
+        if(filtered.length===0) { container.innerHTML="<div style='padding:1rem; text-align:center;'>📚 No words yet. Add your first word above!</div>"; return; }
+        container.innerHTML = filtered.map(w => `
+            <div class="word-card ${w.reviewDate === today ? 'due-today' : ''}">
+                <div class="word-term">📖 ${escapeHtml(w.term)}</div>
+                <div class="word-meaning">📖 ${escapeHtml(w.meaning)}</div>
+                ${w.synonyms ? `<div class="word-synonyms">🔗 Synonyms: ${escapeHtml(w.synonyms)}</div>` : ''}
+                ${w.antonyms ? `<div class="word-antonyms">🚫 Antonyms: ${escapeHtml(w.antonyms)}</div>` : ''}
+                <div class="review-badge">📅 Review: ${w.reviewDate || 'No date set'}</div>
+                <button data-id="${w.id}" class="delete-word-btn" style="margin-top:8px; background:#ef4444; padding:4px 12px; font-size:0.7rem;">Delete</button>
+            </div>
+        `).join('');
+        document.querySelectorAll('.delete-word-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => { const id = parseInt(btn.dataset.id); words = words.filter(w=>w.id!==id); saveWords(); });
+        });
+    }
+    
+    // ==================== HEALTH TRACKER ====================
+    let healthLogs = [];
+    function loadHealth() { const stored = localStorage.getItem(STORAGE.HEALTH); if(stored) healthLogs = JSON.parse(stored); else healthLogs = []; renderHealth(); updateHealthSummary(); }
+    function saveHealth() { localStorage.setItem(STORAGE.HEALTH, JSON.stringify(healthLogs)); renderHealth(); updateHealthSummary(); }
+    function addHealthEntry(date, foodOk, workoutOk) {
+        const existing = healthLogs.findIndex(h=>h.date===date);
+        const entry = { date, food: foodOk, workout: workoutOk, timestamp:Date.now() };
+        if(existing>=0) healthLogs[existing] = entry;
+        else healthLogs.unshift(entry);
+        healthLogs.sort((a,b)=>b.date.localeCompare(a.date));
+        saveHealth();
+    }
+    function renderHealth() {
+        const container = document.getElementById("healthEntriesList"); if(!container) return;
+        if(healthLogs.length===0) { container.innerHTML="<div style='padding:1rem;'>No health logs yet. Start tracking your meals and workouts!</div>"; return; }
+        container.innerHTML = healthLogs.map(log => `
+            <div class="health-entry">
+                <div class="health-date">📅 ${log.date}</div>
+                <div>🍽️ Proper Food: ${log.food ? '✅ Yes' : '❌ No'}</div>
+                <div>🏋️ Workout: ${log.workout ? '✅ Done' : '❌ Not done'}</div>
+                <button data-date="${log.date}" class="delete-health-btn" style="margin-top:6px; background:#dc2626; padding:4px 12px; font-size:0.7rem;">Delete</button>
+            </div>
+        `).join('');
+        document.querySelectorAll('.delete-health-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => { const date = btn.dataset.date; healthLogs = healthLogs.filter(h=>h.date!==date); saveHealth(); });
+        });
+    }
+    function updateHealthSummary() {
+        const totalDays = healthLogs.length;
+        const goodFoodDays = healthLogs.filter(h=>h.food).length;
+        const workoutDays = healthLogs.filter(h=>h.workout).length;
+        const summaryDiv = document.getElementById("healthSummary");
+        if(summaryDiv) summaryDiv.innerHTML = `
+            <div class="stat-card">📊 Total Logged: ${totalDays} days</div>
+            <div class="stat-card">🥗 Proper Food: ${goodFoodDays} days</div>
+            <div class="stat-card">💪 Workout Done: ${workoutDays} days</div>
+            <div class="stat-card">🏆 Consistency: ${totalDays>0 ? Math.round((workoutDays/totalDays)*100) : 0}%</div>
+        `;
+    }
+    
+    // ==================== AIM ====================
+    function loadAim() { const saved = localStorage.getItem(STORAGE.AIM); if(saved) document.getElementById("aimTextArea").value = saved; else document.getElementById("aimTextArea").value = "✨ My yearly aim: Build discipline, expand vocabulary, stay fit, and grow every single day."; }
+    function saveAim() { localStorage.setItem(STORAGE.AIM, document.getElementById("aimTextArea").value); const status=document.getElementById("aimStatus"); status.innerText="✅ Aim saved!"; setTimeout(()=>status.innerText="",2000); }
+    
+    // ==================== YEAR TRACKER ====================
+    let yearEntries = [];
+    function loadYearTracker() { const stored = localStorage.getItem(STORAGE.YEAR_TRACK); if(stored) yearEntries = JSON.parse(stored); else yearEntries = []; renderTrackEntries(); }
+    function saveYearTracker() { localStorage.setItem(STORAGE.YEAR_TRACK, JSON.stringify(yearEntries)); renderTrackEntries(); }
+    function addYearEntry(date, text) { if(!text.trim()) return; yearEntries.unshift({ date, text:text.trim(), timestamp:Date.now() }); if(yearEntries.length>200) yearEntries.pop(); saveYearTracker(); }
+    function renderTrackEntries() { const container=document.getElementById("trackEntriesList"); if(!container) return; if(yearEntries.length===0) { container.innerHTML="<div>No entries yet.</div>"; return; } container.innerHTML = yearEntries.slice(0,40).map(e=>`<div style="background:#f9f9ff; border-radius:16px; padding:8px 12px; margin-bottom:8px;"><strong>📅 ${e.date}</strong><br>${escapeHtml(e.text)}</div>`).join(''); }
+    
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    // ==================== UI TABS ====================
+    function switchTab(tabId) {
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active-panel'));
+        document.getElementById(tabId).classList.add('active-panel');
+        document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.remove('active'));
+        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
+        if(tabId === 'tab-pomo' && pomoChart) pomoChart.update();
+        if(tabId === 'tab-words') renderWords();
+        if(tabId === 'tab-health') { renderHealth(); updateHealthSummary(); }
+    }
+    
+    // ==================== INIT & EVENT LISTENERS ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById("yearDisplay").innerHTML = `📅 ${new Date().getFullYear()} · Rolling Data`;
+        loadTodos(); loadPomodoro(); loadWords(); loadHealth(); loadAim(); loadYearTracker();
+        resetTimer(); updateTimerDisplay();
+        
+        document.getElementById("addTodoBtn")?.addEventListener("click", () => { addTodo(document.getElementById("todoTitle").value, document.getElementById("todoPriority").value, document.getElementById("todoDue").value); document.getElementById("todoTitle").value=""; });
+        document.getElementById("pomoStart")?.addEventListener("click", startTimer);
+        document.getElementById("pomoPause")?.addEventListener("click", pauseTimer);
+        document.getElementById("pomoReset")?.addEventListener("click", resetTimer);
+        document.getElementById("logSessionBtn")?.addEventListener("click", () => { addPomodoroSession(); resetTimer(); });
+        
+        document.getElementById("addWordBtn")?.addEventListener("click", () => { addWord(document.getElementById("wordTerm").value, document.getElementById("wordMeaning").value, document.getElementById("wordSynonyms").value, document.getElementById("wordAntonyms").value, document.getElementById("wordReviewDate").value); document.getElementById("wordTerm").value=""; document.getElementById("wordMeaning").value=""; document.getElementById("wordSynonyms").value=""; document.getElementById("wordAntonyms").value=""; document.getElementById("wordReviewDate").value=""; });
+        document.getElementById("filterAllWords")?.addEventListener("click", () => { currentWordFilter="all"; renderWords(); });
+        document.getElementById("filterDueToday")?.addEventListener("click", () => { currentWordFilter="due"; renderWords(); });
+        
+        document.getElementById("addHealthEntryBtn")?.addEventListener("click", () => { const date = document.getElementById("healthDate").value || getTodayStr(); const food = document.getElementById("foodCheck").checked; const workout = document.getElementById("workoutCheck").checked; addHealthEntry(date, food, workout); document.getElementById("foodCheck").checked=false; document.getElementById("workoutCheck").checked=false; });
+        document.getElementById("clearHealthData")?.addEventListener("click", () => { if(confirm("Delete ALL health data?")) { healthLogs=[]; saveHealth(); } });
+        
+        document.getElementById("saveAimBtn")?.addEventListener("click", saveAim);
+        document.getElementById("addTrackBtn")?.addEventListener("click", () => { addYearEntry(document.getElementById("trackDate").value || getTodayStr(), document.getElementById("trackValue").value); document.getElementById("trackValue").value=""; });
+        document.getElementById("clearAllYearData")?.addEventListener("click", () => { if(confirm("Clear all yearly tracker entries?")) { yearEntries=[]; saveYearTracker(); } });
+        
+        document.querySelectorAll(".tab-btn").forEach(btn => { btn.addEventListener("click", (e) => { const tabId = btn.getAttribute("data-tab"); if(tabId) switchTab(tabId); }); });
+        
+        // set default health date
+        document.getElementById("healthDate").value = getTodayStr();
+    });
+</script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
       <title> Complete Life Dashboard 🌱🧠💪 📈🚀</title>
       <link rel="icon" type="image/x-icon" href="download.jpg">
-    <style>
+         <style>
         * {
             margin: 0;
             padding: 0;
@@ -26,6 +26,8 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --reward-gold: #fbbf24;
+            --reward-silver: #94a3b8;
             --card-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
             --input-bg: white;
             --tab-active: #ffffff;
@@ -44,13 +46,13 @@
             --input-bg: #334155;
             --tab-active: #1e293b;
             --tab-inactive: #94a3b8;
+            --reward-gold: #f59e0b;
         }
 
         body {
             background: var(--bg-primary);
             color: var(--text-primary);
             padding: 2rem 1.5rem;
-            transition: background 0.3s, color 0.3s;
         }
 
         .app-container {
@@ -58,7 +60,6 @@
             margin: 0 auto;
         }
 
-        /* Header with theme toggle */
         .header {
             margin-bottom: 1.5rem;
             display: flex;
@@ -85,6 +86,37 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        /* Rewards Banner */
+        .rewards-banner {
+            background: linear-gradient(135deg, var(--reward-gold), var(--accent));
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .points-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .points-display span:first-child {
+            font-size: 1.8rem;
+        }
+        .achievement-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
         }
 
         .privacy-banner {
@@ -158,7 +190,7 @@
             gap: 1.8rem;
         }
 
-        /* Pomodoro Timer Section */
+        /* Timer */
         .timer-display {
             font-size: 4rem;
             font-weight: 800;
@@ -186,21 +218,31 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             border: 1px solid var(--border-light);
-            padding: 0.4rem 1rem;
-            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 40px;
+        }
+        .preset-btn.break {
+            background: var(--warning);
+            color: white;
+            border: none;
         }
         .custom-timer {
             display: flex;
             gap: 0.5rem;
             justify-content: center;
             margin-top: 0.5rem;
+            flex-wrap: wrap;
         }
         .custom-timer input {
-            width: 80px;
+            width: 100px;
             text-align: center;
             background: var(--input-bg);
             color: var(--text-primary);
             border: 1px solid var(--border-light);
+            border-radius: 40px;
+            padding: 0.5rem;
         }
 
         /* Music Player */
@@ -210,115 +252,112 @@
             padding: 1rem;
             margin-top: 1rem;
         }
-        .music-controls {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: 0.8rem;
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 1rem;
         }
         .music-btn {
             background: var(--accent);
-            padding: 0.4rem 1rem;
+            padding: 0.5rem;
             font-size: 0.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            text-align: center;
+            color: white;
         }
         .volume-slider {
             flex: 1;
             min-width: 120px;
         }
 
-        /* Data Table Section */
-        .data-table-wrapper {
-            overflow-x: auto;
-            margin-top: 1rem;
-        }
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .data-table th, .data-table td {
-            border: 1px solid var(--border-light);
-            padding: 0.75rem;
-            text-align: left;
-        }
-        .data-table th {
+        /* Todo Items */
+        .todo-item {
             background: var(--bg-primary);
-            font-weight: 600;
+            border-radius: 20px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--border-light);
+        }
+        .todo-content { flex: 1; }
+        .todo-text { font-weight: 500; }
+        .todo-due { font-size: 0.7rem; color: var(--text-secondary); }
+        .todo-actions button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 0 4px;
+            color: var(--text-primary);
+        }
+        .add-todo-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 1rem;
         }
 
-        /* Flex Page (Blank Canvas) Styles */
-        .flex-canvas {
-            min-height: 500px;
-            display: flex;
-            flex-direction: column;
+        /* Reward Animation */
+        @keyframes rewardPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .canvas-header {
+        .reward-toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--reward-gold), var(--accent));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 60px;
+            font-weight: bold;
+            z-index: 1000;
+            animation: rewardPop 0.5s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-light);
+            gap: 10px;
         }
-        .canvas-header input {
-            flex: 2;
-            font-size: 1.3rem;
-            font-weight: 600;
+
+        .data-selector {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .data-selector select {
+            flex: 1;
+            padding: 0.7rem;
+            border-radius: 40px;
             background: var(--input-bg);
             border: 1px solid var(--border-light);
-            padding: 0.6rem 1rem;
+            color: var(--text-primary);
         }
-        .color-picker-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
+        .data-viewer {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            padding: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
         }
-        .color-picker-group label {
-            font-size: 0.8rem;
+        .data-entry {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border-light);
         }
-        .color-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: 0.1s;
-        }
-        .color-btn.selected {
-            border: 2px solid var(--text-primary);
-            transform: scale(1.05);
-        }
-        .bg-color-btn {
-            background: #ffffff;
-            border: 1px solid #ddd;
-        }
-        .canvas-textarea {
-            width: 100%;
-            min-height: 400px;
-            padding: 1.5rem;
-            font-size: 1rem;
-            line-height: 1.6;
-            background: var(--canvas-bg, #fff9f0);
-            color: var(--canvas-text, #1e293b);
-            border: 2px solid var(--border-light);
-            border-radius: 24px;
-            resize: vertical;
-            font-family: inherit;
-            transition: background 0.2s, color 0.2s;
-        }
-        .canvas-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        .flex-note {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 0.8rem;
-            text-align: center;
+        .stats-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
         }
 
         input, select, textarea {
@@ -348,35 +387,43 @@
 <body>
 <div class="app-container">
     <div class="header">
-        <h1> Complete Life Dashboard 🌱🧠💪 📈🚀</h1>
+        <h1>🏆 Progress Tracker</h1>
         <button class="theme-toggle" id="themeToggleBtn">🌙 Dark Mode</button>
     </div>
 
+    <!-- Rewards Banner -->
+    <div class="rewards-banner">
+        <div class="points-display">
+            <span>🏆</span>
+            <span id="totalPoints">0</span>
+            <span>Points</span>
+        </div>
+        <div class="achievement-badge" id="achievementBadge">✨ Keep going!</div>
+    </div>
+
     <div class="privacy-banner">
-        🔒 Your data stays in browser localStorage • Flex Canvas auto-saves • Music uses Web Audio
+        🔒 Your data stays in browser localStorage • Complete tasks & earn rewards! 🎁
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" data-tab="tab-todo">✅ To-Do</button>
+        <button class="tab-btn active" data-tab="tab-todo">✅ To-Do List</button>
         <button class="tab-btn" data-tab="tab-pomo">🍅 Pomodoro + Music</button>
         <button class="tab-btn" data-tab="tab-words">📖 Word Vault</button>
-        <button class="tab-btn" data-tab="tab-health">💪 Health</button>
-        <button class="tab-btn" data-tab="tab-table">📊 Data Table</button>
-        <button class="tab-btn" data-tab="tab-aim">🎯 My Aim</button>
-        <button class="tab-btn" data-tab="tab-flex">🎨 Flex Page</button>
+        <button class="tab-btn" data-tab="tab-health">💪 Health Tracker</button>
+        <button class="tab-btn" data-tab="tab-data">🏅 Insights & Rewards</button>
     </div>
 
     <!-- TO-DO PANEL -->
     <div id="tab-todo" class="panel active-panel">
         <div class="card">
-            <div class="card-title">📋 Prioritized Tasks</div>
+            <div class="card-title">📋 My Tasks</div>
             <div id="todo-list-container"></div>
-            <div class="add-todo-form" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:1rem;">
+            <div class="add-todo-form">
                 <input type="text" id="todoTitle" placeholder="Task title" style="flex:2;">
-                <select id="todoPriority"><option value="high">🔥 High</option><option value="medium">⚡ Medium</option><option value="low">🌿 Low</option></select>
                 <input type="date" id="todoDue">
-                <button id="addTodoBtn">+ Add</button>
+                <button id="addTodoBtn">+ Add Task</button>
             </div>
+            <div style="font-size:0.7rem; margin-top:0.8rem;">✨ Complete tasks to earn 10 points each!</div>
         </div>
     </div>
 
@@ -384,46 +431,54 @@
     <div id="tab-pomo" class="panel">
         <div class="grid-2col">
             <div class="card">
-                <div class="card-title">🍅 Smart Pomodoro</div>
+                <div class="card-title">🍅 Smart Pomodoro Timer</div>
                 <div class="timer-display" id="timerLabel">25:00</div>
+                
                 <div class="timer-presets">
-                    <button class="preset-btn" data-minutes="25">📘 Short (25min)</button>
-                    <button class="preset-btn" data-minutes="50">📚 Long (50min)</button>
-                    <button class="preset-btn" data-minutes="15">☕ Break (15min)</button>
+                    <button class="preset-btn" data-minutes="25">📘 Focus (25min)</button>
+                    <button class="preset-btn" data-minutes="50">📚 Deep (50min)</button>
+                    <button class="preset-btn break" data-minutes="5">☕ Short Break (5min)</button>
+                    <button class="preset-btn break" data-minutes="10">🌿 Long Break (10min)</button>
                 </div>
+                
                 <div class="custom-timer">
                     <input type="number" id="customMinutes" placeholder="Minutes" min="1" max="180" value="25">
                     <button id="setCustomTimer">Set Custom</button>
+                    <input type="number" id="customBreakMinutes" placeholder="Break min" min="1" max="60" value="5">
+                    <button id="setBreakTimer">Set Break</button>
                 </div>
+                
                 <div class="pomo-controls">
                     <button id="pomoStart">▶ Start</button>
                     <button id="pomoPause">⏸ Pause</button>
                     <button id="pomoReset">🔄 Reset</button>
                 </div>
-                <div style="background:var(--bg-primary); border-radius:24px; padding:1rem; margin-top:1rem;">
-                    <div>✅ Today: <strong id="sessionCountToday">0</strong></div>
-                    <div>📅 Year total: <strong id="totalSessionsYear">0</strong></div>
-                    <button id="logSessionBtn" class="success" style="margin-top:8px;">💾 Save Session</button>
+                
+                <div style="background:var(--bg-primary); border-radius:24px; padding:1rem; margin-top:1rem; text-align:center;">
+                    <div>✅ Today's Sessions: <strong id="sessionCountToday">0</strong></div>
+                    <div>📅 Total Sessions: <strong id="totalSessionsYear">0</strong></div>
+                    <div style="font-size:0.7rem; margin-top:5px;">⚡ Each session = 5 points! Auto-saves on completion</div>
                 </div>
             </div>
+            
             <div class="card">
                 <div class="card-title">🎵 Study Music & Ambience</div>
                 <div class="music-player">
-                    <div class="music-controls">
-                        <button id="playLofi" class="music-btn">🎧 Lofi Study</button>
-                        <button id="playNature" class="music-btn">🌿 Nature Rain</button>
-                        <button id="playPiano" class="music-btn">🎹 Piano Focus</button>
-                        <button id="stopMusic" class="secondary">⏹️ Stop</button>
+                    <div class="music-grid">
+                        <button class="music-btn" data-music="nature">🌿 Nature Rain</button>
+                        <button class="music-btn" data-music="calm-piano">🎹 Calm Piano</button>
+                        <button class="music-btn" data-music="meditation">🧘 Meditation Bowl</button>
+                        <button class="music-btn" data-music="ocean">🌊 Ocean Waves</button>
+                        <button class="music-btn" data-music="forest">🍃 Forest Birds</button>
                     </div>
-                    <div class="music-controls">
+                    <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
                         <span>🔊 Volume:</span>
                         <input type="range" id="volumeSlider" min="0" max="100" value="30" class="volume-slider">
                         <span id="volumeValue">30%</span>
+                        <button id="stopMusic" class="secondary">⏹️ Stop</button>
                     </div>
-                    <div id="musicStatus" style="font-size:0.75rem; margin-top:5px;">⚪ Stopped</div>
+                    <div id="musicStatus" style="font-size:0.75rem; margin-top:8px;">⚪ No music playing</div>
                 </div>
-                <div class="card-title" style="margin-top:1rem;">📈 Pomodoro Chart (30d)</div>
-                <canvas id="pomoChart" height="200"></canvas>
             </div>
         </div>
     </div>
@@ -431,85 +486,64 @@
     <!-- WORD VAULT -->
     <div id="tab-words" class="panel">
         <div class="card">
-            <div class="card-title">📖 Word Vault</div>
+            <div class="card-title">📖 Word Vault · Learn Vocabulary</div>
             <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:1rem;">
                 <input type="text" id="wordTerm" placeholder="Word" style="flex:1.5;">
                 <input type="text" id="wordMeaning" placeholder="Meaning" style="flex:2;">
                 <input type="text" id="wordSynonyms" placeholder="Synonyms" style="flex:1;">
                 <input type="text" id="wordAntonyms" placeholder="Antonyms" style="flex:1;">
                 <input type="date" id="wordReviewDate">
-                <button id="addWordBtn">➕ Add</button>
+                <button id="addWordBtn">➕ Add Word (5 pts)</button>
             </div>
-            <div id="wordsListContainer"></div>
+            <div id="wordsListContainer" style="max-height:400px; overflow-y:auto;"></div>
+            <div style="font-size:0.7rem; margin-top:0.5rem;">📖 Each new word = 5 points!</div>
         </div>
     </div>
 
     <!-- HEALTH TRACKER -->
     <div id="tab-health" class="panel">
         <div class="card">
-            <div class="card-title">💪 Food & Workout Log</div>
+            <div class="card-title">💪 Food & Workout Tracker</div>
             <div class="stats-summary" id="healthSummary" style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;"></div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
                 <input type="date" id="healthDate">
                 <label><input type="checkbox" id="foodCheck"> 🥗 Proper Food</label>
-                <label><input type="checkbox" id="workoutCheck"> 🏋️ Workout</label>
-                <button id="addHealthEntryBtn" class="success">Log</button>
+                <label><input type="checkbox" id="workoutCheck"> 🏋️ Workout Done</label>
+                <button id="addHealthEntryBtn" class="success">Log Entry (5 pts each)</button>
             </div>
-            <div id="healthEntriesList" style="margin-top:1rem;"></div>
+            <div id="healthEntriesList" style="margin-top:1rem; max-height:300px; overflow-y:auto;"></div>
+            <div style="font-size:0.7rem; margin-top:0.5rem;">💪 Each healthy habit logged = 5 points!</div>
         </div>
     </div>
 
-    <!-- DATA TABLE - Consolidated View -->
-    <div id="tab-table" class="panel">
+    <!-- DATA INSIGHTS & REWARDS -->
+    <div id="tab-data" class="panel">
         <div class="card">
-            <div class="card-title">📊 Consolidated Year Data Table</div>
-            <div class="data-table-wrapper">
-                <table class="data-table" id="masterDataTable">
-                    <thead><tr><th>Date / Type</th><th>Category</th><th>Details</th></tr></thead>
-                    <tbody id="tableBody"><tr><td colspan="3">Loading...</td></tr></tbody>
-                </table>
+            <div class="card-title">🏅 Achievements & Rewards</div>
+            <div id="achievementsList" style="margin-bottom: 1.5rem;"></div>
+            
+            <div class="card-title" style="margin-top: 1rem;">📊 Progress Insights</div>
+            <div class="data-selector">
+                <select id="dataTypeSelect">
+                    <option value="sessions">🍅 Pomodoro Sessions</option>
+                    <option value="tasks">📋 Task Progress</option>
+                    <option value="words">📖 Words Learned</option>
+                    <option value="health">💪 Wellness Logs</option>
+                </select>
+                <button id="refreshDataView" class="secondary">🔄 Refresh</button>
             </div>
-            <button id="refreshTableBtn" style="margin-top:1rem;">🔄 Refresh Table</button>
-        </div>
-    </div>
-
-    <!-- AIM -->
-    <div id="tab-aim" class="panel">
-        <div class="card">
-            <div class="card-title">🌟 My Aim</div>
-            <textarea id="aimTextArea" rows="5" style="width:100%; border-radius:24px;"></textarea>
-            <button id="saveAimBtn">💾 Save Aim</button>
-        </div>
-    </div>
-
-    <!-- FLEX PAGE: Blank Canvas with customizable heading & colors -->
-    <div id="tab-flex" class="panel">
-        <div class="card flex-canvas">
-            <div class="card-title">🎨 Flex Canvas · Your Creative Space</div>
-            <div class="canvas-header">
-                <input type="text" id="flexHeading" placeholder="Section Heading (e.g., Journal, Ideas, Draft)" value="✨ My Creative Space">
-                <div class="color-picker-group">
-                    <label>📝 Text Color:</label>
-                    <input type="color" id="textColorPicker" value="#1e293b">
-                    <label>🎨 Background:</label>
-                    <input type="color" id="bgColorPicker" value="#fff9f0">
-                    <button id="resetFlexColors" class="secondary" style="padding:0.4rem 1rem;">Reset Colors</button>
-                </div>
+            <div id="dataViewer" class="data-viewer">
+                <div class="data-entry">Select a category to view your progress</div>
             </div>
-            <textarea id="flexContent" class="canvas-textarea" placeholder="Write anything you want here... stories, notes, brainstorming, dreams, daily reflections...&#10;&#10;This is your blank canvas. Change heading, text color, background color anytime. Everything auto-saves!"></textarea>
-            <div class="canvas-actions">
-                <button id="saveFlexNow" class="success">💾 Save Now</button>
-                <button id="clearFlexContent" class="danger">🗑️ Clear All Content</button>
-                <span style="margin-left:auto; font-size:0.75rem;">✨ Auto-saves on every change</span>
+            <div style="margin-top:1rem; text-align:center;">
+                <button id="claimRewardBtn" class="success" style="background: var(--reward-gold);">🎁 Claim Weekly Bonus (50 pts)</button>
             </div>
-            <div class="flex-note">💡 Tip: Change heading, pick any colors — your canvas is stored locally. Use it for journaling, project outlines, or free writing.</div>
         </div>
     </div>
     
-    <footer style="text-align:center; margin-top:2rem; font-size:0.7rem;">🎵 Study Music uses Web Audio Oscillator | Flex Canvas auto-saves heading, content & colors</footer>
+    <footer style="text-align:center; margin-top:2rem; font-size:0.7rem;">🏆 Complete tasks, log habits, finish pomodoros to earn points & unlock achievements!</footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
     // ========== THEME TOGGLE ==========
     function initTheme() {
@@ -519,121 +553,350 @@
     }
     function toggleTheme() { document.body.classList.toggle('dark'); const isDark = document.body.classList.contains('dark'); localStorage.setItem('zenith_theme', isDark ? 'dark' : 'light'); document.getElementById('themeToggleBtn').innerHTML = isDark ? '☀️ Light Mode' : '🌙 Dark Mode'; }
     
-    // ========== MUSIC PLAYER (Web Audio) ==========
-    let audioContext = null, currentOscillator = null, currentGain = null;
+    // ========== REWARDS SYSTEM ==========
+    let rewardPoints = 0;
+    let achievements = [];
+    
+    function loadRewards() {
+        const saved = localStorage.getItem('zenith_rewards');
+        if(saved) {
+            const data = JSON.parse(saved);
+            rewardPoints = data.points || 0;
+            achievements = data.achievements || [];
+        } else {
+            rewardPoints = 0;
+            achievements = [];
+        }
+        updateRewardsDisplay();
+    }
+    
+    function saveRewards() {
+        localStorage.setItem('zenith_rewards', JSON.stringify({ points: rewardPoints, achievements: achievements }));
+    }
+    
+    function addPoints(amount, reason) {
+        rewardPoints += amount;
+        saveRewards();
+        updateRewardsDisplay();
+        showRewardToast(`+${amount} pts! ${reason}`, amount);
+        checkAchievements();
+        return rewardPoints;
+    }
+    
+    function showRewardToast(message, points) {
+        const toast = document.createElement('div');
+        toast.className = 'reward-toast';
+        toast.innerHTML = `🎉 ${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+    
+    function updateRewardsDisplay() {
+        document.getElementById('totalPoints').innerText = rewardPoints;
+        const badge = document.getElementById('achievementBadge');
+        if(rewardPoints >= 500) badge.innerHTML = '👑 Legendary Status!';
+        else if(rewardPoints >= 300) badge.innerHTML = '🌟 Elite Achiever';
+        else if(rewardPoints >= 150) badge.innerHTML = '⭐ Rising Star';
+        else if(rewardPoints >= 50) badge.innerHTML = '✨ Dedicated Learner';
+        else badge.innerHTML = '🌱 Keep growing!';
+        
+        renderAchievements();
+    }
+    
+    function checkAchievements() {
+        let newAchievements = [];
+        
+        if(rewardPoints >= 100 && !achievements.includes('💪 100 Points Club')) {
+            achievements.push('💪 100 Points Club');
+            newAchievements.push('💪 100 Points Club');
+        }
+        if(rewardPoints >= 250 && !achievements.includes('⭐ 250 Points Master')) {
+            achievements.push('⭐ 250 Points Master');
+            newAchievements.push('⭐ 250 Points Master');
+        }
+        if(rewardPoints >= 500 && !achievements.includes('👑 500 Points Legend')) {
+            achievements.push('👑 500 Points Legend');
+            newAchievements.push('👑 500 Points Legend');
+        }
+        
+        const pomodoroCount = pomodoroSessions.reduce((a,b)=>a+b.count,0);
+        if(pomodoroCount >= 10 && !achievements.includes('🍅 10 Pomodoros')) {
+            achievements.push('🍅 10 Pomodoros');
+            newAchievements.push('🍅 10 Pomodoros');
+        }
+        if(pomodoroCount >= 50 && !achievements.includes('🍅 50 Pomodoros')) {
+            achievements.push('🍅 50 Pomodoros');
+            newAchievements.push('🍅 50 Pomodoros');
+        }
+        
+        const taskComplete = todos.filter(t=>t.completed).length;
+        if(taskComplete >= 10 && !achievements.includes('✅ 10 Tasks Done')) {
+            achievements.push('✅ 10 Tasks Done');
+            newAchievements.push('✅ 10 Tasks Done');
+        }
+        
+        const wordCount = words.length;
+        if(wordCount >= 20 && !achievements.includes('📖 20 Words Learned')) {
+            achievements.push('📖 20 Words Learned');
+            newAchievements.push('📖 20 Words Learned');
+        }
+        
+        const healthDays = healthLogs.length;
+        if(healthDays >= 7 && !achievements.includes('💪 7 Days Tracked')) {
+            achievements.push('💪 7 Days Tracked');
+            newAchievements.push('💪 7 Days Tracked');
+        }
+        
+        if(newAchievements.length > 0) {
+            saveRewards();
+            updateRewardsDisplay();
+            newAchievements.forEach(ach => showRewardToast(`🏆 Achievement Unlocked: ${ach}! +20 bonus points`, 20));
+            addPoints(newAchievements.length * 20, 'Achievement bonus!');
+        }
+    }
+    
+    function renderAchievements() {
+        const container = document.getElementById('achievementsList');
+        if(!container) return;
+        if(achievements.length === 0) {
+            container.innerHTML = '<div style="padding:1rem; text-align:center;">✨ Complete activities to unlock achievements!</div>';
+            return;
+        }
+        container.innerHTML = '<div style="display:flex; gap:0.5rem; flex-wrap:wrap;">' + achievements.map(a => `<span style="background:var(--reward-gold); color:#1e293b; padding:0.3rem 0.8rem; border-radius:40px; font-size:0.8rem;">🏅 ${a}</span>`).join('') + '</div>';
+    }
+    
+    // ========== MUSIC PLAYER (Non-distracting) ==========
+    let audioContext = null, currentNodes = [], currentGain = null;
     function initAudio() { if(audioContext) return; audioContext = new (window.AudioContext || window.webkitAudioContext)(); currentGain = audioContext.createGain(); currentGain.connect(audioContext.destination); const vol = document.getElementById('volumeSlider').value/100; currentGain.gain.value = vol; }
-    function stopMusic() { if(currentOscillator) { if(Array.isArray(currentOscillator)) currentOscillator.forEach(n=>{ try{ n.stop?.(); n.disconnect?.(); }catch(e){} }); else try{ currentOscillator.stop?.(); currentOscillator.disconnect?.(); }catch(e){} currentOscillator=null; } document.getElementById('musicStatus').innerHTML='⚪ Stopped'; }
-    function playStudyMusic(type) { stopMusic(); initAudio(); if(audioContext.state === 'suspended') audioContext.resume(); if(type === 'lofi') { const osc1=audioContext.createOscillator(), osc2=audioContext.createOscillator(), gain=audioContext.createGain(); gain.gain.value=0.12; osc1.type='sine'; osc2.type='triangle'; osc1.frequency.value=174.61; osc2.frequency.value=261.63; osc1.connect(gain); osc2.connect(gain); gain.connect(currentGain); osc1.start(); osc2.start(); currentOscillator=[osc1,osc2,gain]; }
-    else if(type === 'nature') { const bufferSize=4096, noise=audioContext.createScriptProcessor(bufferSize,1,1); noise.onaudioprocess=e=>{ let out=e.outputBuffer.getChannelData(0); for(let i=0;i<bufferSize;i++) out[i]=(Math.random()*2-1)*0.08; }; const filter=audioContext.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value=1200; noise.connect(filter); filter.connect(currentGain); noise.start?.(); currentOscillator=[noise,filter]; }
-    else if(type === 'piano') { const osc=audioContext.createOscillator(); osc.type='sine'; osc.frequency.value=440; const gain=audioContext.createGain(); gain.gain.value=0.08; osc.connect(gain); gain.connect(currentGain); osc.start(); currentOscillator=[osc,gain]; }
-    document.getElementById('musicStatus').innerHTML=`🎵 Playing: ${type} study music`; }
-    function setVolume(val) { if(currentGain) currentGain.gain.value = val/100; document.getElementById('volumeValue').innerText=val+'%'; }
+    function stopMusic() { currentNodes.forEach(node => { try { node.stop?.(); node.disconnect?.(); } catch(e){} }); currentNodes = []; document.getElementById('musicStatus').innerHTML = '⚪ Silent'; }
+    function playSereneSound(type) {
+        stopMusic(); initAudio(); if(audioContext.state === 'suspended') audioContext.resume();
+        if(type === 'nature') {
+            const bufferSize = 4096; const noise = audioContext.createScriptProcessor(bufferSize,1,1);
+            noise.onaudioprocess = (e) => { const out = e.outputBuffer.getChannelData(0); for(let i=0;i<bufferSize;i++) out[i] = (Math.random()*2-1)*0.07; };
+            const filter = audioContext.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 1800;
+            noise.connect(filter); filter.connect(currentGain); noise.start?.();
+            currentNodes = [noise, filter];
+            document.getElementById('musicStatus').innerHTML = '🌿 Nature Rain';
+        }
+        else if(type === 'calm-piano') {
+            const playNote = (freq, duration, delay=0) => {
+                const osc = audioContext.createOscillator(); const gain = audioContext.createGain();
+                osc.type = 'sine'; osc.frequency.value = freq; gain.gain.value = 0.08;
+                osc.connect(gain); gain.connect(currentGain);
+                osc.start(audioContext.currentTime + delay);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + delay + duration);
+                osc.stop(audioContext.currentTime + delay + duration);
+                currentNodes.push(osc, gain);
+            };
+            playNote(261.63, 2, 0); playNote(329.63, 2, 1.5); playNote(392.00, 2.5, 3);
+            const loopInterval = setInterval(() => { if(document.getElementById('musicStatus').innerHTML.includes('Calm Piano')) { playNote(261.63, 1.8, 0); playNote(329.63, 1.8, 1.2); } }, 7000);
+            currentNodes.push({ stop: () => clearInterval(loopInterval) });
+            document.getElementById('musicStatus').innerHTML = '🎹 Calm Piano';
+        }
+        else if(type === 'meditation') {
+            const osc = audioContext.createOscillator(); osc.type = 'sine'; osc.frequency.value = 136.1;
+            const gain = audioContext.createGain(); gain.gain.value = 0.1;
+            osc.connect(gain); gain.connect(currentGain); osc.start();
+            currentNodes = [osc, gain];
+            document.getElementById('musicStatus').innerHTML = '🧘 Meditation Bowl';
+        }
+        else if(type === 'ocean') {
+            const bufferSize = 4096; const noise = audioContext.createScriptProcessor(bufferSize,1,1);
+            noise.onaudioprocess = (e) => { const out = e.outputBuffer.getChannelData(0); for(let i=0;i<bufferSize;i++) out[i] = (Math.random()*2-1)*0.05; };
+            const filter = audioContext.createBiquadFilter(); filter.type = 'bandpass'; filter.frequency.value = 800;
+            noise.connect(filter); filter.connect(currentGain); noise.start?.();
+            currentNodes = [noise, filter];
+            document.getElementById('musicStatus').innerHTML = '🌊 Ocean Waves';
+        }
+        else if(type === 'forest') {
+            const bufferSize = 4096; const noise = audioContext.createScriptProcessor(bufferSize,1,1);
+            noise.onaudioprocess = (e) => { const out = e.outputBuffer.getChannelData(0); for(let i=0;i<bufferSize;i++) out[i] = (Math.random()*2-1)*0.045; };
+            const filter = audioContext.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 1000;
+            noise.connect(filter); filter.connect(currentGain); noise.start?.();
+            const chirp = setInterval(() => {
+                if(document.getElementById('musicStatus').innerHTML.includes('Forest')) {
+                    const chirpOsc = audioContext.createOscillator(); const chirpGain = audioContext.createGain();
+                    chirpOsc.type = 'sine'; chirpOsc.frequency.value = 1800; chirpGain.gain.value = 0.03;
+                    chirpOsc.connect(chirpGain); chirpGain.connect(currentGain);
+                    chirpOsc.start(); chirpGain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.5);
+                    chirpOsc.stop(audioContext.currentTime + 0.5);
+                }
+            }, 12000);
+            currentNodes = [noise, filter, { stop: () => clearInterval(chirp) }];
+            document.getElementById('musicStatus').innerHTML = '🍃 Forest Birds';
+        }
+    }
+    function setVolume(val) { if(currentGain) currentGain.gain.value = val/100; document.getElementById('volumeValue').innerText = val+'%'; }
     
     // ========== STORAGE KEYS ==========
-    const STORAGE = { TODOS:"zenith_todos", POMO_SESSIONS:"zenith_pomo_sessions", AIM:"zenith_aim_text", YEAR_TRACK:"zenith_year_track_entries", WORDS:"zenith_word_vault", HEALTH:"zenith_health_logs", FLEX:"zenith_flex_canvas" };
+    const STORAGE = { TODOS:"zenith_todos_no_priority", POMO_SESSIONS:"zenith_pomo_sessions", WORDS:"zenith_word_vault", HEALTH:"zenith_health_logs" };
     function getTodayStr() { return new Date().toISOString().slice(0,10); }
     function escapeHtml(s) { if(!s) return ''; return s.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
     
-    // ========== FLEX PAGE (Blank Canvas) ==========
-    let flexData = { heading: "✨ My Creative Space", content: "", textColor: "#1e293b", bgColor: "#fff9f0" };
-    function loadFlex() {
-        const saved = localStorage.getItem(STORAGE.FLEX);
-        if(saved) { flexData = JSON.parse(saved); }
-        document.getElementById("flexHeading").value = flexData.heading;
-        document.getElementById("flexContent").value = flexData.content;
-        document.getElementById("textColorPicker").value = flexData.textColor;
-        document.getElementById("bgColorPicker").value = flexData.bgColor;
-        applyFlexStyles();
+    // ========== TO-DO with Rewards ==========
+    let todos = [];
+    function loadTodos() {
+        const stored = localStorage.getItem(STORAGE.TODOS);
+        if(stored) todos = JSON.parse(stored);
+        else todos = [{ id: Date.now(), title: "Complete your first Pomodoro session", dueDate: getTodayStr(), completed: false }];
+        saveTodos(); renderTodos();
     }
-    function applyFlexStyles() {
-        const textarea = document.getElementById("flexContent");
-        textarea.style.color = flexData.textColor;
-        textarea.style.backgroundColor = flexData.bgColor;
-        document.documentElement.style.setProperty('--canvas-bg', flexData.bgColor);
-        document.documentElement.style.setProperty('--canvas-text', flexData.textColor);
+    function saveTodos() { localStorage.setItem(STORAGE.TODOS, JSON.stringify(todos)); }
+    function renderTodos() {
+        const container = document.getElementById("todo-list-container");
+        if(!container) return;
+        if(todos.length === 0) { container.innerHTML = "<div style='padding:1rem; text-align:center;'>✨ No tasks. Add one above!</div>"; return; }
+        container.innerHTML = todos.map(todo => `
+            <div class="todo-item" style="opacity: ${todo.completed ? 0.6 : 1};">
+                <div class="todo-content">
+                    <div class="todo-text" style="text-decoration: ${todo.completed ? 'line-through' : 'none'}">${escapeHtml(todo.title)}</div>
+                    <div class="todo-due">📅 ${todo.dueDate || 'No due date'}</div>
+                </div>
+                <div class="todo-actions">
+                    <button data-id="${todo.id}" class="toggle-todo">✓</button>
+                    <button data-id="${todo.id}" class="delete-todo">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.toggle-todo').forEach(btn => { btn.onclick = () => { 
+            const t = todos.find(t=>t.id==parseInt(btn.dataset.id)); 
+            if(t && !t.completed) { 
+                t.completed = true; 
+                addPoints(10, `Completed task: "${t.title.substring(0,30)}"`);
+            } else if(t && t.completed) {
+                t.completed = false;
+            }
+            saveTodos(); renderTodos(); 
+        }; });
+        document.querySelectorAll('.delete-todo').forEach(btn => { btn.onclick = () => { todos = todos.filter(t=>t.id!=parseInt(btn.dataset.id)); saveTodos(); renderTodos(); }; });
     }
-    function saveFlex() {
-        flexData.heading = document.getElementById("flexHeading").value;
-        flexData.content = document.getElementById("flexContent").value;
-        flexData.textColor = document.getElementById("textColorPicker").value;
-        flexData.bgColor = document.getElementById("bgColorPicker").value;
-        localStorage.setItem(STORAGE.FLEX, JSON.stringify(flexData));
-        applyFlexStyles();
-        const statusDiv = document.createElement('div'); statusDiv.style.position='fixed'; statusDiv.style.bottom='20px'; statusDiv.style.right='20px'; statusDiv.style.background='var(--success)'; statusDiv.style.color='white'; statusDiv.style.padding='6px 12px'; statusDiv.style.borderRadius='20px'; statusDiv.style.fontSize='12px'; statusDiv.innerText='✅ Canvas saved'; document.body.appendChild(statusDiv); setTimeout(()=>statusDiv.remove(),1500);
+    function addTodo(title, dueDate) { if(title.trim()) { todos.push({ id:Date.now(), title:title.trim(), dueDate:dueDate, completed:false }); saveTodos(); renderTodos(); } }
+    
+    // ========== POMODORO with Auto-Save & Rewards ==========
+    let pomodoroSessions = [];
+    let timerInterval = null, timeLeft = 25*60, isRunning = false;
+    function loadPomodoro() { const stored = localStorage.getItem(STORAGE.POMO_SESSIONS); pomodoroSessions = stored ? JSON.parse(stored) : []; updateStats(); }
+    function savePomodoro() { localStorage.setItem(STORAGE.POMO_SESSIONS, JSON.stringify(pomodoroSessions)); updateStats(); }
+    function updateStats() { 
+        document.getElementById("sessionCountToday").innerText = pomodoroSessions.find(e=>e.date===getTodayStr())?.count || 0;
+        document.getElementById("totalSessionsYear").innerText = pomodoroSessions.reduce((a,b)=>a+b.count,0);
     }
-    function clearFlexContent() { if(confirm("Clear all canvas content? This cannot be undone.")) { document.getElementById("flexContent").value = ""; saveFlex(); } }
-    function resetFlexColors() { document.getElementById("textColorPicker").value = "#1e293b"; document.getElementById("bgColorPicker").value = "#fff9f0"; saveFlex(); }
-    
-    // ========== OTHER MODULES (simplified but functional) ==========
-    let todos=[], pomodoroSessions=[], words=[], healthLogs=[], yearEntries=[];
-    let timerInterval=null, timeLeft=25*60, isRunning=false, pomoChart=null;
-    
-    function loadTodos() { const s=localStorage.getItem(STORAGE.TODOS); todos=s?JSON.parse(s):[{id:Date.now(),title:"Explore Flex Canvas",priority:"medium",dueDate:getTodayStr(),completed:false}]; saveTodos(); renderTodos(); }
-    function saveTodos() { localStorage.setItem(STORAGE.TODOS,JSON.stringify(todos)); }
-    function renderTodos() { const c=document.getElementById("todo-list-container"); if(!c) return; if(todos.length===0){c.innerHTML="<div>✨ No tasks</div>";return;} c.innerHTML=todos.map(t=>`<div style="display:flex;gap:10px;background:var(--bg-primary);margin-bottom:8px;padding:10px;border-radius:20px;"><div style="width:8px;border-radius:10px;background:${t.priority==='high'?'#ef4444':t.priority==='medium'?'#f97316':'#22c55e'}"></div><div style="flex:1"><div style="text-decoration:${t.completed?'line-through':'none'}">${escapeHtml(t.title)}</div><small>${t.dueDate||''}</small></div><button data-id="${t.id}" class="toggle-todo">✓</button><button data-id="${t.id}" class="delete-todo">🗑️</button></div>`).join('');
-        document.querySelectorAll('.toggle-todo').forEach(b=>{ b.onclick=()=>{ let tt=todos.find(t=>t.id==parseInt(b.dataset.id)); if(tt) tt.completed=!tt.completed; saveTodos(); renderTodos(); }; });
-        document.querySelectorAll('.delete-todo').forEach(b=>{ b.onclick=()=>{ todos=todos.filter(t=>t.id!=parseInt(b.dataset.id)); saveTodos(); renderTodos(); }; }); }
-    function addTodo(title,priority,due){ if(title.trim()){ todos.push({id:Date.now(),title:title.trim(),priority,dueDate:due,completed:false}); saveTodos(); renderTodos(); } }
-    
-    function loadPomodoro() { const s=localStorage.getItem(STORAGE.POMO_SESSIONS); pomodoroSessions=s?JSON.parse(s):[]; updateStats(); renderPomoChart(); }
-    function savePomodoro() { localStorage.setItem(STORAGE.POMO_SESSIONS,JSON.stringify(pomodoroSessions)); updateStats(); renderPomoChart(); }
-    function updateStats() { document.getElementById("sessionCountToday").innerText=pomodoroSessions.find(e=>e.date===getTodayStr())?.count||0; document.getElementById("totalSessionsYear").innerText=pomodoroSessions.reduce((a,b)=>a+b.count,0); }
-    function addPomodoroSession() { let t=getTodayStr(); let i=pomodoroSessions.findIndex(e=>e.date===t); if(i>=0) pomodoroSessions[i].count++; else pomodoroSessions.push({date:t,count:1}); savePomodoro(); }
-    function renderPomoChart() { const canvas=document.getElementById("pomoChart"); if(!canvas) return; let labels=[], data=[]; for(let i=29;i>=0;i--){ let d=new Date(); d.setDate(d.getDate()-i); let ds=d.toISOString().slice(0,10); labels.push(ds.slice(5)); let s=pomodoroSessions.find(e=>e.date===ds); data.push(s?s.count:0); } if(pomoChart){ pomoChart.data.labels=labels; pomoChart.data.datasets[0].data=data; pomoChart.update(); } else { pomoChart=new Chart(canvas,{type:'bar',data:{labels,datasets:[{label:'Pomodoros',data,backgroundColor:'#3b82f6'}]},options:{responsive:true}}); } }
-    function updateTimerDisplay(){ let m=Math.floor(timeLeft/60),s=timeLeft%60; document.getElementById("timerLabel").innerText=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
-    function startTimer(){ if(timerInterval) clearInterval(timerInterval); isRunning=true; timerInterval=setInterval(()=>{ if(timeLeft>0&&isRunning){ timeLeft--; updateTimerDisplay(); } else if(timeLeft===0&&isRunning){ clearInterval(timerInterval); isRunning=false; alert("Time's up! Save session."); } },1000); }
-    function pauseTimer(){ isRunning=false; if(timerInterval) clearInterval(timerInterval); timerInterval=null; }
+    function autoSaveSession() {
+        const today = getTodayStr();
+        const idx = pomodoroSessions.findIndex(e=>e.date===today);
+        if(idx >= 0) pomodoroSessions[idx].count++;
+        else pomodoroSessions.push({ date: today, count: 1 });
+        savePomodoro();
+        addPoints(5, 'Pomodoro session completed!');
+        updateTabTitle();
+    }
+    function updateTimerDisplay() { let m=Math.floor(timeLeft/60), s=timeLeft%60; document.getElementById("timerLabel").innerText=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; updateTabTitle(); }
+    function updateTabTitle() { if(isRunning) { let m=Math.floor(timeLeft/60), s=timeLeft%60; document.title = `🍅 ${m}:${s.toString().padStart(2,'0')} - Focus`; } else { document.title = `🏆 ZenithSpace`; } }
+    function startTimer() { if(timerInterval) clearInterval(timerInterval); isRunning=true; timerInterval=setInterval(()=>{ if(timeLeft>0 && isRunning){ timeLeft--; updateTimerDisplay(); } else if(timeLeft===0 && isRunning){ clearInterval(timerInterval); isRunning=false; autoSaveSession(); updateTabTitle(); alert("🎉 Session complete! +5 points!"); } },1000); updateTabTitle(); }
+    function pauseTimer(){ isRunning=false; if(timerInterval) clearInterval(timerInterval); timerInterval=null; updateTabTitle(); }
     function resetTimer(){ pauseTimer(); timeLeft=25*60; updateTimerDisplay(); }
-    function setTimer(minutes){ pauseTimer(); timeLeft=minutes*60; updateTimerDisplay(); }
+    function setTimer(minutes){ pauseTimer(); timeLeft = minutes * 60; updateTimerDisplay(); }
     
-    function loadWords(){ const s=localStorage.getItem(STORAGE.WORDS); words=s?JSON.parse(s):[]; renderWords(); }
-    function saveWords(){ localStorage.setItem(STORAGE.WORDS,JSON.stringify(words)); renderWords(); }
-    function addWord(t,m,syn,ant,rd){ if(t.trim()&&m.trim()){ words.push({id:Date.now(),term:t.trim(),meaning:m.trim(),synonyms:syn||"",antonyms:ant||"",reviewDate:rd||""}); saveWords(); } }
-    function renderWords(){ const c=document.getElementById("wordsListContainer"); if(!c) return; if(words.length===0){c.innerHTML="<div>No words yet</div>";return;} c.innerHTML=words.map(w=>`<div style="background:var(--bg-primary);border-radius:16px;padding:10px;margin-bottom:8px;"><strong>📖 ${escapeHtml(w.term)}</strong><br>${escapeHtml(w.meaning)}<br>🔗 ${w.synonyms||'-'} | 🚫 ${w.antonyms||'-'}<br><small>Review: ${w.reviewDate||'none'}</small><button data-id="${w.id}" class="del-word" style="margin-top:5px;background:#ef4444;padding:2px 12px;">Delete</button></div>`).join('');
-        document.querySelectorAll('.del-word').forEach(b=>{ b.onclick=()=>{ words=words.filter(w=>w.id!=parseInt(b.dataset.id)); saveWords(); }; }); }
+    // ========== WORD VAULT with Rewards ==========
+    let words = [];
+    function loadWords() { const stored = localStorage.getItem(STORAGE.WORDS); words = stored ? JSON.parse(stored) : []; renderWords(); }
+    function saveWords() { localStorage.setItem(STORAGE.WORDS, JSON.stringify(words)); renderWords(); }
+    function addWord(term, meaning, synonyms, antonyms, reviewDate) { if(term.trim() && meaning.trim()) { 
+        words.push({ id:Date.now(), term:term.trim(), meaning:meaning.trim(), synonyms:synonyms||"", antonyms:antonyms||"", reviewDate:reviewDate||"" }); 
+        saveWords(); 
+        addPoints(5, `Added word: "${term}"`);
+    } }
+    function renderWords() {
+        const container = document.getElementById("wordsListContainer");
+        if(!container) return;
+        if(words.length === 0) { container.innerHTML = "<div style='padding:1rem; text-align:center;'>📚 No words yet. Add your first word!</div>"; return; }
+        container.innerHTML = words.map(w => `<div style="background:var(--bg-primary); border-radius:16px; padding:12px; margin-bottom:8px;"><strong>📖 ${escapeHtml(w.term)}</strong><br>${escapeHtml(w.meaning)}<br><span style="font-size:0.75rem;">🔗 ${w.synonyms || '-'} | 🚫 ${w.antonyms || '-'} | Review: ${w.reviewDate || 'none'}</span><br><button data-id="${w.id}" class="del-word" style="margin-top:6px; background:#ef4444; padding:4px 12px;">Delete</button></div>`).join('');
+        document.querySelectorAll('.del-word').forEach(btn => { btn.onclick = () => { words = words.filter(w=>w.id!=parseInt(btn.dataset.id)); saveWords(); }; });
+    }
     
-    function loadHealth(){ const s=localStorage.getItem(STORAGE.HEALTH); healthLogs=s?JSON.parse(s):[]; renderHealth(); updateHealthSummary(); }
-    function saveHealth(){ localStorage.setItem(STORAGE.HEALTH,JSON.stringify(healthLogs)); renderHealth(); updateHealthSummary(); }
-    function addHealthEntry(date,food,workout){ let idx=healthLogs.findIndex(h=>h.date===date); if(idx>=0) healthLogs[idx]={date,food,workout}; else healthLogs.unshift({date,food,workout}); healthLogs.sort((a,b)=>b.date.localeCompare(a.date)); saveHealth(); }
-    function renderHealth(){ const c=document.getElementById("healthEntriesList"); if(!c) return; if(healthLogs.length===0){c.innerHTML="<div>No logs</div>";return;} c.innerHTML=healthLogs.map(h=>`<div style="background:var(--bg-primary);border-radius:16px;padding:8px;margin-bottom:6px;"><strong>${h.date}</strong><br>🥗 ${h.food?'✅':'❌'} | 🏋️ ${h.workout?'✅':'❌'}<button data-date="${h.date}" class="del-health" style="margin-left:10px;background:#ef4444;padding:2px 10px;">Del</button></div>`).join('');
-        document.querySelectorAll('.del-health').forEach(b=>{ b.onclick=()=>{ healthLogs=healthLogs.filter(h=>h.date!==b.dataset.date); saveHealth(); }; }); }
-    function updateHealthSummary(){ const total=healthLogs.length, food=healthLogs.filter(h=>h.food).length, work=healthLogs.filter(h=>h.workout).length; document.getElementById("healthSummary").innerHTML=`<div class="stat-card">📊 ${total} days</div><div class="stat-card">🥗 Food: ${food}</div><div class="stat-card">💪 Workout: ${work}</div><div class="stat-card">🏆 ${total>0?Math.round(work/total*100):0}%</div>`; }
+    // ========== HEALTH TRACKER with Rewards ==========
+    let healthLogs = [];
+    function loadHealth() { const stored = localStorage.getItem(STORAGE.HEALTH); healthLogs = stored ? JSON.parse(stored) : []; renderHealth(); updateHealthSummary(); }
+    function saveHealth() { localStorage.setItem(STORAGE.HEALTH, JSON.stringify(healthLogs)); renderHealth(); updateHealthSummary(); }
+    function addHealthEntry(date, food, workout) {
+        let pointsEarned = 0;
+        if(food) pointsEarned += 5;
+        if(workout) pointsEarned += 5;
+        const existing = healthLogs.findIndex(h=>h.date===date);
+        if(existing >= 0) {
+            const old = healthLogs[existing];
+            if(!old.food && food) pointsEarned += 5;
+            if(!old.workout && workout) pointsEarned += 5;
+            healthLogs[existing] = { date, food, workout };
+        } else {
+            healthLogs.unshift({ date, food, workout });
+        }
+        healthLogs.sort((a,b)=>b.date.localeCompare(a.date));
+        saveHealth();
+        if(pointsEarned > 0) addPoints(pointsEarned, `Healthy habits logged!`);
+    }
+    function renderHealth() {
+        const container = document.getElementById("healthEntriesList");
+        if(!container) return;
+        if(healthLogs.length === 0) { container.innerHTML = "<div style='padding:1rem; text-align:center;'>No health logs yet</div>"; return; }
+        container.innerHTML = healthLogs.map(h => `<div style="background:var(--bg-primary); border-radius:16px; padding:10px; margin-bottom:6px;"><strong>📅 ${h.date}</strong><br>🥗 Proper Food: ${h.food ? '✅ Yes' : '❌ No'} | 🏋️ Workout: ${h.workout ? '✅ Done' : '❌ Not done'}<button data-date="${h.date}" class="del-health" style="margin-left:10px; background:#ef4444; padding:2px 12px;">Delete</button></div>`).join('');
+        document.querySelectorAll('.del-health').forEach(btn => { btn.onclick = () => { healthLogs = healthLogs.filter(h=>h.date!==btn.dataset.date); saveHealth(); }; });
+    }
+    function updateHealthSummary() {
+        const total = healthLogs.length, foodDays = healthLogs.filter(h=>h.food).length, workoutDays = healthLogs.filter(h=>h.workout).length;
+        document.getElementById("healthSummary").innerHTML = `<div style="background:var(--bg-primary); padding:0.5rem 1rem; border-radius:20px;">📊 Total: ${total} days</div><div style="background:var(--bg-primary); padding:0.5rem 1rem; border-radius:20px;">🥗 Food: ${foodDays}</div><div style="background:var(--bg-primary); padding:0.5rem 1rem; border-radius:20px;">💪 Workout: ${workoutDays}</div>`;
+    }
     
-    function loadAim(){ const s=localStorage.getItem(STORAGE.AIM); document.getElementById("aimTextArea").value=s? s:"✨ My aim: Stay consistent, learn daily."; }
-    function saveAim(){ localStorage.setItem(STORAGE.AIM, document.getElementById("aimTextArea").value); alert("Aim saved!"); }
+    // ========== DATA VIEWER ==========
+    function renderDataViewer(type) {
+        const container = document.getElementById("dataViewer");
+        if(type === 'sessions') {
+            if(pomodoroSessions.length === 0) { container.innerHTML = '<div class="data-entry">No Pomodoro sessions yet.</div>'; return; }
+            const total = pomodoroSessions.reduce((a,b)=>a+b.count,0);
+            container.innerHTML = `<div class="stats-badge">🍅 Total Sessions: ${total} (+${total*5} points earned)</div>` + [...pomodoroSessions].sort((a,b)=>b.date.localeCompare(a.date)).map(s => `<div class="data-entry"><strong>📅 ${s.date}</strong><br>✅ ${s.count} session${s.count!==1?'s':''}</div>`).join('');
+        }
+        else if(type === 'tasks') {
+            const completed = todos.filter(t=>t.completed).length;
+            container.innerHTML = `<div class="stats-badge">📋 Completed: ${completed}/${todos.length} tasks (+${completed*10} points)</div>` + todos.map(t => `<div class="data-entry"><strong>${escapeHtml(t.title)}</strong><br>📅 ${t.dueDate||'No date'} | ${t.completed?'✓ Completed (+10 pts)':'○ Pending'}</div>`).join('');
+        }
+        else if(type === 'words') {
+            container.innerHTML = `<div class="stats-badge">📖 Total Words: ${words.length} (+${words.length*5} points)</div>` + words.map(w => `<div class="data-entry"><strong>${escapeHtml(w.term)}</strong><br>${escapeHtml(w.meaning)}</div>`).join('');
+        }
+        else if(type === 'health') {
+            const foodCount = healthLogs.filter(h=>h.food).length, workoutCount = healthLogs.filter(h=>h.workout).length;
+            container.innerHTML = `<div class="stats-badge">💪 ${healthLogs.length} days | 🥗 ${foodCount} meals | 🏋️ ${workoutCount} workouts (+${(foodCount+workoutCount)*5} points)</div>` + healthLogs.map(h => `<div class="data-entry"><strong>📅 ${h.date}</strong><br>🥗 ${h.food?'✓':'✗'} | 🏋️ ${h.workout?'✓':'✗'}</div>`).join('');
+        }
+    }
     
-    function loadYearTracker(){ const s=localStorage.getItem(STORAGE.YEAR_TRACK); yearEntries=s?JSON.parse(s):[]; }
-    function renderMasterTable(){ const body=document.getElementById("tableBody"); if(!body) return; let rows=[]; todos.forEach(t=>rows.push(`<tr><td>${t.dueDate||'No date'}</td><td>To-Do</td><td>${escapeHtml(t.title)} (${t.priority}) ${t.completed?'✓':''}</td></tr>`)); healthLogs.forEach(h=>rows.push(`<tr><td>${h.date}</td><td>Health</td><td>Food:${h.food?'✅':'❌'} Workout:${h.workout?'✅':'❌'}</td></tr>`)); words.forEach(w=>rows.push(`<tr><td>${w.reviewDate||'Added'}</td><td>Word</td><td>${escapeHtml(w.term)}: ${escapeHtml(w.meaning)}</td></tr>`)); yearEntries.slice(0,30).forEach(y=>rows.push(`<tr><td>${y.date}</td><td>Year Log</td><td>${escapeHtml(y.text)}</td></tr>`)); if(rows.length===0) body.innerHTML='<tr><td colspan="3">No data yet</td></tr>'; else body.innerHTML=rows.join(''); }
-    
-    // ========== INIT & EVENT LISTENERS ==========
+    // ========== INIT ==========
     document.addEventListener('DOMContentLoaded', () => {
-        initTheme(); loadFlex(); loadTodos(); loadPomodoro(); loadWords(); loadHealth(); loadAim(); loadYearTracker(); renderMasterTable();
-        document.getElementById("themeToggleBtn").onclick=toggleTheme;
-        document.getElementById("addTodoBtn").onclick=()=>{ addTodo(document.getElementById("todoTitle").value, document.getElementById("todoPriority").value, document.getElementById("todoDue").value); document.getElementById("todoTitle").value=""; };
-        document.getElementById("pomoStart").onclick=startTimer; document.getElementById("pomoPause").onclick=pauseTimer; document.getElementById("pomoReset").onclick=resetTimer;
-        document.getElementById("logSessionBtn").onclick=()=>{ addPomodoroSession(); resetTimer(); };
-        document.querySelectorAll(".preset-btn").forEach(btn=>{ btn.onclick=()=>{ setTimer(parseInt(btn.dataset.minutes)); }; });
-        document.getElementById("setCustomTimer").onclick=()=>{ let mins=parseInt(document.getElementById("customMinutes").value); if(mins>0) setTimer(mins); };
-        document.getElementById("addWordBtn").onclick=()=>{ addWord(document.getElementById("wordTerm").value, document.getElementById("wordMeaning").value, document.getElementById("wordSynonyms").value, document.getElementById("wordAntonyms").value, document.getElementById("wordReviewDate").value); document.getElementById("wordTerm").value=""; document.getElementById("wordMeaning").value=""; document.getElementById("wordSynonyms").value=""; document.getElementById("wordAntonyms").value=""; };
-        document.getElementById("addHealthEntryBtn").onclick=()=>{ addHealthEntry(document.getElementById("healthDate").value||getTodayStr(), document.getElementById("foodCheck").checked, document.getElementById("workoutCheck").checked); document.getElementById("foodCheck").checked=false; document.getElementById("workoutCheck").checked=false; };
-        document.getElementById("saveAimBtn").onclick=saveAim;
-        document.getElementById("refreshTableBtn").onclick=renderMasterTable;
-        document.getElementById("playLofi").onclick=()=>playStudyMusic("lofi");
-        document.getElementById("playNature").onclick=()=>playStudyMusic("nature");
-        document.getElementById("playPiano").onclick=()=>playStudyMusic("piano");
-        document.getElementById("stopMusic").onclick=stopMusic;
-        document.getElementById("volumeSlider").oninput=e=>setVolume(e.target.value);
-        document.getElementById("saveFlexNow").onclick=saveFlex;
-        document.getElementById("clearFlexContent").onclick=clearFlexContent;
-        document.getElementById("resetFlexColors").onclick=resetFlexColors;
-        document.getElementById("flexHeading").onchange=saveFlex;
-        document.getElementById("flexContent").oninput=saveFlex;
-        document.getElementById("textColorPicker").onchange=saveFlex;
-        document.getElementById("bgColorPicker").onchange=saveFlex;
-        document.getElementById("healthDate").value=getTodayStr();
-        document.querySelectorAll(".tab-btn").forEach(btn=>{ btn.onclick=()=>{ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active-panel')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(btn.dataset.tab).classList.add('active-panel'); btn.classList.add('active'); if(btn.dataset.tab==='tab-table') renderMasterTable(); if(btn.dataset.tab==='tab-flex') applyFlexStyles(); }; });
-        resetTimer(); updateTimerDisplay();
+        initTheme(); loadRewards(); loadTodos(); loadPomodoro(); loadWords(); loadHealth();
+        document.getElementById("themeToggleBtn").onclick = toggleTheme;
+        document.getElementById("addTodoBtn").onclick = () => { addTodo(document.getElementById("todoTitle").value, document.getElementById("todoDue").value); document.getElementById("todoTitle").value = ""; };
+        document.getElementById("pomoStart").onclick = startTimer;
+        document.getElementById("pomoPause").onclick = pauseTimer;
+        document.getElementById("pomoReset").onclick = resetTimer;
+        document.querySelectorAll(".preset-btn").forEach(btn => { btn.onclick = () => { setTimer(parseInt(btn.dataset.minutes)); }; });
+        document.getElementById("setCustomTimer").onclick = () => { let mins = parseInt(document.getElementById("customMinutes").value); if(mins>0) setTimer(mins); };
+        document.getElementById("setBreakTimer").onclick = () => { let mins = parseInt(document.getElementById("customBreakMinutes").value); if(mins>0) setTimer(mins); };
+        document.getElementById("addWordBtn").onclick = () => { addWord(document.getElementById("wordTerm").value, document.getElementById("wordMeaning").value, document.getElementById("wordSynonyms").value, document.getElementById("wordAntonyms").value, document.getElementById("wordReviewDate").value); document.getElementById("wordTerm").value=""; document.getElementById("wordMeaning").value=""; document.getElementById("wordSynonyms").value=""; document.getElementById("wordAntonyms").value=""; };
+        document.getElementById("addHealthEntryBtn").onclick = () => { addHealthEntry(document.getElementById("healthDate").value||getTodayStr(), document.getElementById("foodCheck").checked, document.getElementById("workoutCheck").checked); document.getElementById("foodCheck").checked=false; document.getElementById("workoutCheck").checked=false; };
+        document.querySelectorAll(".music-btn").forEach(btn => { btn.onclick = () => playSereneSound(btn.dataset.music); });
+        document.getElementById("stopMusic").onclick = stopMusic;
+        document.getElementById("volumeSlider").oninput = e => setVolume(e.target.value);
+        document.getElementById("refreshDataView").onclick = () => renderDataViewer(document.getElementById("dataTypeSelect").value);
+        document.getElementById("dataTypeSelect").onchange = () => renderDataViewer(document.getElementById("dataTypeSelect").value);
+        document.getElementById("claimRewardBtn").onclick = () => {
+            const lastClaim = localStorage.getItem('last_weekly_claim');
+            const today = getTodayStr();
+            if(lastClaim === today) alert("You've already claimed your weekly bonus today! Come back tomorrow.");
+            else { addPoints(50, 'Weekly Bonus!'); localStorage.setItem('last_weekly_claim', today); }
+        };
+        document.getElementById("healthDate").value = getTodayStr();
+        document.querySelectorAll(".tab-btn").forEach(btn => { btn.onclick = () => { document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active-panel')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(btn.dataset.tab).classList.add('active-panel'); btn.classList.add('active'); if(btn.dataset.tab === 'tab-data') renderDataViewer(document.getElementById("dataTypeSelect").value); }; });
+        resetTimer(); updateTimerDisplay(); renderDataViewer('sessions');
     });
 </script>
 </body>
-</html>
+</html>   
